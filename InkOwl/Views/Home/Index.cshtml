@@ -1,8 +1,171 @@
-﻿@{
+﻿@model List<Nest>
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<form method="post" action="/nest/new">
+    <button type="submit"> New Nest</button>
+</form>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @if (Model.Count == 0)
+    {
+        <h1>You have no Nests</h1>
+    }
+    else
+    {
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var nest = Model[i];
+            <div>
+                <div style="display:inline-flex">
+                    <h1><a href="/nest/@nest.Id">@nest.Title</a></h1>
+                    <button class="btn btn-open" data-modal-id="@i">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <section class="modal hidden" id="modal-@i">
+                    <div class="flex">
+                        <button class="btn-close">⨉</button>
+                    </div>
+                    <div>
+                        <form method="post" action="/nest/edit/@nest.Id">
+                            <label for="Title">DocumentTitle</label>
+                            <input type="text" id="Title" name="Title" value="@nest.Title">
+                            <button type="submit" class="btn">Rename</button>
+                        </form>
+                        <form method="post" action="/nest/delete/@nest.Id">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+
+                </section>
+                <div class="overlay hidden"></div>
+            </div>
+        }
+    }
 </div>
+
+
+
+<style>
+
+    .modal {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.4rem;
+        width: 450px;
+        padding: 1.3rem;
+        min-height: 250px;
+        position: absolute;
+        z-index: 2;
+        top: 20%;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+    }
+
+        .modal .flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal input {
+            padding: 0.7rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .modal p {
+            font-size: 0.9rem;
+            color: #777;
+            margin: 0.4rem 0 0.2rem;
+        }
+
+    button {
+        cursor: pointer;
+        border: none;
+        font-weight: 600;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 0.8rem 1.4rem;
+        font-weight: 700;
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 1em;
+    }
+
+    /* .btn-open {
+                    position: absolute;
+                    bottom: 150px;
+                }*/
+
+    .btn-close {
+        transform: translate(10px, -20px);
+        padding: 0.5rem 0.7rem;
+        background: #eee;
+        border-radius: 50%;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+        z-index: 1;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const openModalBtns = document.querySelectorAll(".btn-open");
+        const modals = document.querySelectorAll(".modal");
+        const overlay = document.querySelector(".overlay");
+
+        // Open modal function
+        const openModal = function (modalId) {
+            const modal = document.getElementById("modal-" + modalId);
+            modal.classList.remove("hidden");
+            overlay.classList.remove("hidden");
+
+        };
+
+        // Close modal function
+        const closeModal = function (modalId) {
+            const modal = document.getElementById("modal-" + modalId);
+            modal.classList.add("hidden");
+            overlay.classList.add("hidden");
+        };
+
+        // Add event listeners to open and close each modal
+        openModalBtns.forEach((btn, index) => {
+            btn.addEventListener("click", () => openModal(index));
+        });
+
+        modals.forEach((modal, index) => {
+            modal.querySelector(".btn-close").addEventListener("click", () => closeModal(index));
+        });
+    });
+</script>

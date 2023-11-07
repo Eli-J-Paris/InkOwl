@@ -1,0 +1,79 @@
+﻿@model Nest
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<form method="post" action="/nest/update/@Model.Id/@Model.Articles[0].Id/@Model.Notes[0].Id">
+    <input type="hidden" id="articleContent" name="articleContent" />
+    <input type="hidden" id="noteContent" name="noteContent" />
+
+    <button type="submit">Save</button>
+</form>
+<h1>Single Nest View for @Model.Title</h1>
+<div class="nest-container">
+    <div class="article">
+        <h1>article</h1>
+        <div id="article-editor" style="">
+            @*later will be active int*@
+            @Html.Raw(Model.Articles[0].Content)
+        </div>
+    </div>
+    <div class="notes">
+        <h1>Notes</h1>
+        <div id="note-editor" style="">
+            @Html.Raw(Model.Notes[0].Content)
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+        [{ 'direction': 'rtl' }],                         // text direction
+
+        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+
+        ['clean']                                         // remove formatting button
+    ];
+
+    
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var articleContent = quillArticle.root.innerHTML;
+        var noteContent = quillNote.root.innerHTML;
+        document.getElementById('articleContent').value = articleContent;
+        document.getElementById('noteContent').value = noteContent;
+        this.submit(); // Submit the form with the editor content
+    });
+
+    var quillArticle = new Quill('#article-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'// 'bubble'
+    });
+
+    var quillNote = new Quill('#note-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow' /*'bubble'*/
+    });
+
+</script>
