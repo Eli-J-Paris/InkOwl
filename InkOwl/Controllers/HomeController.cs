@@ -1,6 +1,7 @@
 ﻿using InkOwl.DataAccess;
 using InkOwl.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace InkOwl.Controllers
@@ -25,16 +26,22 @@ namespace InkOwl.Controllers
         public IActionResult CreateNest()
         {
             //create a new untitled nest
-            var nest = new Nest { Title ="Untitled", CreatedAt = DateTime.Now.ToUniversalTime()};
+            var article = new Article();
+            var textDoc = new TextDoc();
+
+            var nest = new Nest();
+            nest.Articles.Add(article);
+            nest.Notes.Add(textDoc);
+
             _context.Nests.Add(nest);
             _context.SaveChanges();
             return Redirect("/home");
         }
 
-        [Route("/nest/{q}")]
-        public IActionResult ShowNest(string q)
+        [Route("/nest/{id}")]
+        public IActionResult ShowNest(int id)
         {
-            var nest = _context.Nests.Find(q);
+            var nest = _context.Nests.Where(n => n.Id == id).Include(n =>n.Articles).First();
             return View(nest);
         }
 
@@ -55,12 +62,25 @@ namespace InkOwl.Controllers
         [Route("/nest/delete/{id}")]
         public IActionResult DeleteNest(int id)
         {
-            var nest = _context.Nests.Find(id);
+            var nest = _context.Nests.Where(n =>n.Id ==id).Include(n=>n.Articles).Include(n=>n.Notes).First();
             _context.Nests.Remove(nest);
             _context.SaveChanges();
 
             return Redirect("/home");
 
+        }
+
+        [HttpPost]
+        [Route("/nest/update/{articleid}")]
+        public IActionResult UpdateNest(int articleid, string content)
+        {
+            var article = _context.Articles.Find(articleid);
+            article.Content = content;
+            _context.Articles.Update(article);
+            _context.SaveChanges();
+
+            //return Redirect($"/nest/{id}");
+            return Redirect("/home");
         }
 
 
