@@ -41,7 +41,7 @@ namespace InkOwl.Controllers
         [Route("/nest/{id}")]
         public IActionResult ShowNest(int id)
         {
-            var nest = _context.Nests.Where(n => n.Id == id).Include(n =>n.Articles).First();
+            var nest = _context.Nests.Where(n => n.Id == id).Include(n =>n.Articles).Include(n=>n.Notes).First();
             return View(nest);
         }
 
@@ -71,16 +71,41 @@ namespace InkOwl.Controllers
         }
 
         [HttpPost]
-        [Route("/nest/update/{articleid}")]
-        public IActionResult UpdateNest(int articleid, string content)
+        [Route("/nest/update/{nestId}/{articleId}/{noteId}")]
+        public IActionResult UpdateNest(int nestId,int articleId,int noteId, string articleContent, string noteContent)
         {
-            var article = _context.Articles.Find(articleid);
-            article.Content = content;
+            UpdateArticle(articleId, articleContent);
+            UpdateNote(noteId, noteContent);
+
+            //return Redirect($"/nest/{nestId}");
+            return Redirect("/home");
+        }
+
+
+        public void UpdateArticle(int articleId, string articleContent)
+        {
+            var article = _context.Articles.Find(articleId);
+            if (article == null)
+            {
+                NotFound();
+            }
+
+            article.Content = articleContent;
             _context.Articles.Update(article);
             _context.SaveChanges();
+        }
 
-            //return Redirect($"/nest/{id}");
-            return Redirect("/home");
+
+        public void UpdateNote(int noteId, string noteContent)
+        {
+            var note = _context.TextDocs.Find(noteId);
+            if (note == null)
+            {
+                NotFound();
+            }
+            note.Content = noteContent;
+            _context.TextDocs.Update(note);
+            _context.SaveChanges();
         }
 
 
