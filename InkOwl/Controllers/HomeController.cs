@@ -1,4 +1,5 @@
-﻿using InkOwl.DataAccess;
+﻿using HtmlAgilityPack;
+using InkOwl.DataAccess;
 using InkOwl.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,44 @@ namespace InkOwl.Controllers
         }
 
 
+        [HttpPost]
+        [Route("/article/{nestId}/{articleId}/upload")]
+        public IActionResult UploadArticle(int nestId, string url, int articleId)
+        {
+            var article = _context.Articles.Find(articleId);
+            article.Content = GetArticleContent(url);
+            UpdateArticle(articleId, article.Content);
+
+            return Redirect($"/nest/{nestId}");
+        }
+
+        static string GetArticleContent(string url)
+        {
+            var document = GetDocument(url);
+            // string contentXpath = "//*[@id=\"4890\"]";
+             string articleContent = string.Empty;
+            // article.Content = document.DocumentNode.SelectSingleNode(contentXpath).InnerHtml;
+            var htmlArticle = document.DocumentNode.SelectSingleNode("//body");
+            HtmlNodeCollection childNodes = htmlArticle.ChildNodes;
+
+            foreach (var node in childNodes)
+            {
+                if (node.NodeType == HtmlNodeType.Element)
+                {
+                    articleContent += node.OuterHtml;
+                }
+            }
+
+            // article.Content = document.DocumentNode.InnerHtml;
+            return articleContent;
+        }
+
+        static HtmlDocument GetDocument(string url)
+        {
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(url);
+            return doc;
+        }
         public void UpdateArticle(int articleId, string articleContent)
         {
             var article = _context.Articles.Find(articleId);

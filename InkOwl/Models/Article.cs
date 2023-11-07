@@ -13,5 +13,10 @@
         //    Title = "Untitled Article";
         //    Content = "Empty Article";
         //}
+
+        //public static string UploadArticle()
+        //{
+
+        //}
     }
 }
