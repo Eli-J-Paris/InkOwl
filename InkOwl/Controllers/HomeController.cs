@@ -22,12 +22,7 @@ namespace InkOwl.Controllers
             return View(nests);
         }
 
-        [Route("/nest/{id}")]
-        public IActionResult ShowNest(int id)
-        {
-            var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
-            return View(nest);
-        }
+        
 
         [HttpPost]
         [Route("/nest/new")]
@@ -44,6 +39,13 @@ namespace InkOwl.Controllers
             _context.Nests.Add(nest);
             _context.SaveChanges();
             return Redirect("/home");
+        }
+
+        [Route("/nest/{id}")]
+        public IActionResult ShowNest(int id)
+        {
+            var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
+            return View(nest);
         }
 
         [HttpPost]
