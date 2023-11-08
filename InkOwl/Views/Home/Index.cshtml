@@ -7,7 +7,7 @@
     <button type="submit"> New Nest</button>
 </form>
 
-<div class="text-center">
+<div class="text-center" style="position:relative">
 
     @if (Model.Count == 0)
     {
@@ -61,12 +61,17 @@
         width: 450px;
         padding: 1.3rem;
         min-height: 250px;
-        position: absolute;
+        max-height:250px;
+        position: fixed;
         z-index: 2;
-        top: 20%;
+        /*top: 20%;*/
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         background-color: white;
         border: 1px solid #ddd;
         border-radius: 15px;
+        text-align:center;
     }
 
         .modal .flex {
@@ -104,8 +109,8 @@
         text-align: center;
         font-size: 1em;
     }
-
-    /* .btn-open {
+/*
+     .btn-open {
                     position: absolute;
                     bottom: 150px;
                 }*/
@@ -142,6 +147,7 @@
         const openModalBtns = document.querySelectorAll(".btn-open");
         const modals = document.querySelectorAll(".modal");
         const overlay = document.querySelector(".overlay");
+        const closeModalBtn = document.querySelector(".btn-close");
 
         // Open modal function
         const openModal = function (modalId) {
@@ -158,6 +164,18 @@
             overlay.classList.add("hidden");
         };
 
+        // close the modal when the close button and overlay is clicked
+        closeModalBtn.addEventListener("click", closeModal);
+        overlay.addEventListener("click", closeModal);
+
+        // close modal when the Esc key is pressed
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                closeModal();
+            }
+        });
+
+
         // Add event listeners to open and close each modal
         openModalBtns.forEach((btn, index) => {
             btn.addEventListener("click", () => openModal(index));
@@ -165,6 +183,8 @@
 
         modals.forEach((modal, index) => {
             modal.querySelector(".btn-close").addEventListener("click", () => closeModal(index));
+            overlay.addEventListener("click", closeModal);
+
         });
     });
 </script>
