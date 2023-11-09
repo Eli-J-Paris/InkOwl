@@ -1,4 +1,6 @@
 using InkOwl.DataAccess;
+using InkOwl.Interfaces;
+using InkOwl.Services;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IChatGptApiService, ChatGptApiService>();
 
 builder.Services.AddDbContext<InkOwlContext>(
         options =>

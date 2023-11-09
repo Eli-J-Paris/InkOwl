@@ -16,13 +16,17 @@ namespace InkOwl.Controllers
             _context = context;
         }
 
+        [Route("/test")]
+        public IActionResult Testing() 
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             var nests = _context.Nests.ToList();
             return View(nests);
         }
-
-        
 
         [HttpPost]
         [Route("/nest/new")]
@@ -73,7 +77,11 @@ namespace InkOwl.Controllers
 
         }
 
-
+        [Route("/chatbot")]
+        public IActionResult ChatBot()
+        {
+            return View();
+        }
 
         //public IActionResult Privacy()
         //{
