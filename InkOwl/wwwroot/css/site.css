@@ -36,3 +36,9 @@ body {
     /*height: 100%;*/
     min-height: 100vh
 }
+
+.chat-bot{
+    position: fixed;
+    right: 5%;
+    bottom: 5%;
+}

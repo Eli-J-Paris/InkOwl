@@ -50,7 +50,6 @@ namespace InkOwl.Controllers
             _context.SaveChanges();
         }
 
-
         public void UpdateNote(int noteId, string noteContent)
         {
             var note = _context.TextDocs.Find(noteId);
