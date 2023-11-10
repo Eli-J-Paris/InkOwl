@@ -35,8 +35,8 @@ namespace InkOwl.Controllers
         public IActionResult CreateNest()
         {
             //create a new untitled nest
-            var article = new Article();
-            var textDoc = new TextDoc();
+            var article = new Article { Title = "Untitled Article" };
+            var textDoc = new TextDoc { Title = "Untitled Notes" };
 
             var nest = new Nest();
             nest.Articles.Add(article);
@@ -44,6 +44,11 @@ namespace InkOwl.Controllers
 
             _context.Nests.Add(nest);
             _context.SaveChanges();
+
+            //Resets the cookies to zero prevent out of index range exception
+            Response.Cookies.Append("ActiveArticle", "0");
+            Response.Cookies.Append("ActiveNote", "0");
+
             return Redirect("/home");
         }
 
@@ -51,8 +56,31 @@ namespace InkOwl.Controllers
         [HttpGet]
         public IActionResult ShowNest(int id)
         {
+            ViewBag.activeArticle = SetActiveArticle();
+            ViewBag.activeNote = SetActiveNote();
+
             var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
             return View(nest);
+        }
+
+
+        public int SetActiveNote()
+        {
+            int activeNote = 0;
+            if (Request.Cookies["ActiveNote"] != null)
+            {
+                activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
+            }
+            return activeNote;
+        }
+        public int SetActiveArticle()
+        {
+            int activeArticle = 0;
+            if (Request.Cookies["ActiveArticle"] != null)
+            {
+                 activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
+            }
+            return activeArticle;
         }
 
         [HttpPost]
