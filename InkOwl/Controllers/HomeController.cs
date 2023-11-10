@@ -17,11 +17,13 @@ namespace InkOwl.Controllers
         }
 
         [Route("/test")]
+        [HttpGet]
         public IActionResult Testing() 
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var nests = _context.Nests.ToList();
@@ -46,6 +48,7 @@ namespace InkOwl.Controllers
         }
 
         [Route("/nest/{id}")]
+        [HttpGet]
         public IActionResult ShowNest(int id)
         {
             var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
@@ -78,6 +81,7 @@ namespace InkOwl.Controllers
         }
 
         [Route("/chatbot")]
+        [HttpGet]
         public IActionResult ChatBot()
         {
             return View();

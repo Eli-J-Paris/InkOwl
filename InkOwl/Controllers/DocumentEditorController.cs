@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using InkOwl.DataAccess;
+using InkOwl.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +15,13 @@ namespace InkOwl.Controllers
             _context = context;
         }
 
-      
+
         [HttpPost]
         [Route("/nest/update/{nestId}/{articleId}/{noteId}")]
-        public IActionResult UpdateNest(int nestId, int articleId, int noteId, string articleContent, string noteContent,string articleTitle, string noteTitle, string url)
+        public IActionResult UpdateNest(int nestId, int articleId, int noteId, string articleContent, string noteContent, string articleTitle, string noteTitle, string url)
         {
-            UpdateArticle(articleId, articleContent, articleTitle ,url);
-            UpdateNote(noteId, noteContent,noteTitle);
+            UpdateArticle(articleId, articleContent, articleTitle, url);
+            UpdateNote(noteId, noteContent, noteTitle);
 
             return Redirect($"/nest/{nestId}");
         }
@@ -36,6 +37,26 @@ namespace InkOwl.Controllers
 
             return Redirect($"/nest/{nestId}");
         }
+
+
+        [HttpPost]
+        [Route("/nest/{nestId}/addarticle")]
+        public IActionResult AddNewArticleToNest(int nestId)
+        {
+            Article article = new Article { Title = "Untitled Article" };
+            var nest = _context.Nests.Find(nestId);
+            nest.Articles.Add(article);
+
+            return Redirect($"/nest/{nestId}");
+        }
+
+
+
+
+
+
+
+
 
         public void UpdateArticle(int articleId, string articleContent, string articleTitle, string url)
         {
@@ -70,7 +91,13 @@ namespace InkOwl.Controllers
             var document = GetDocument(url);
             string articleContent = string.Empty;
             // article.Content = document.DocumentNode.SelectSingleNode(contentXpath).InnerHtml;
+
+
+
+            //this will scrape the entire body if its not a turing article
             var htmlArticle = document.DocumentNode.SelectSingleNode("//body");
+
+
             HtmlNodeCollection childNodes = htmlArticle.ChildNodes;
 
             foreach (var node in childNodes)
