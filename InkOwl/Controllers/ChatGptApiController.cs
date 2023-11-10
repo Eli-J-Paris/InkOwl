@@ -14,7 +14,7 @@ namespace InkOwl.Controllers
         public async Task<IActionResult> AskChatGPT([FromBody] string query)
         {
             string chatURL = "https://api.openai.com/v1/chat/completions";
-            string apiKey = "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";
+            string apiKey = "REPLACE KEY";
             StringBuilder sb = new StringBuilder();
 
             HttpClient oClient = new HttpClient();
