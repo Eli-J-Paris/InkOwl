@@ -9,12 +9,20 @@ namespace InkOwl.Controllers
     [ApiController]
     public class ChatGptApiController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+
+        public ChatGptApiController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
         [HttpPost]
         [Route("AskChatGPT")]
         public async Task<IActionResult> AskChatGPT([FromBody] string query)
         {
             string chatURL = "https://api.openai.com/v1/chat/completions";
-            string apiKey = "REPLACE KEY";
+            string apiKey = _configuration["CHATGPT_APIKEY"];
             StringBuilder sb = new StringBuilder();
 
             HttpClient oClient = new HttpClient();
