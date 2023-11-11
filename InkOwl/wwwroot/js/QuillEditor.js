@@ -27,6 +27,14 @@ document.querySelector('form').addEventListener('submit', function (e) {
     var noteContent = quillNote.root.innerHTML;
     document.getElementById('articleContent').value = articleContent;
     document.getElementById('noteContent').value = noteContent;
+
+
+    var articleTitle = document.getElementById('inputArticleTitle').value;
+    document.getElementById('articleTitle').value = articleTitle
+
+    var noteTitle = document.getElementById('inputNoteTitle').value;
+    document.getElementById('noteTitle').value = noteTitle;
+
     this.submit(); // Submit the form with the editor content
 });
 
