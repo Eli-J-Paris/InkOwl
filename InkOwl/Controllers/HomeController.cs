@@ -65,7 +65,9 @@ namespace InkOwl.Controllers
             {
                 activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
             }
-            Response.Cookies.Append("ActiveNote", "0");
+
+            Response.Cookies.Delete("ActiveArticle");
+            Response.Cookies.Delete("ActiveNote");
             return activeNote;
         }
         public int SetActiveArticle()
@@ -75,7 +77,9 @@ namespace InkOwl.Controllers
             {
                 activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
             }
-            Response.Cookies.Append("ActiveArticle", "0");
+
+            Response.Cookies.Delete("ActiveArticle");
+            Response.Cookies.Delete("ActiveNote");
 
             return activeArticle;
         }
