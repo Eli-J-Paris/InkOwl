@@ -123,7 +123,7 @@
         };
         // Use AJAX to send data to the server
         $.ajax({
-            url: '/savenest/@Model.Id/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id', 
+            url: '/savenest/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id', 
             type: 'POST',
             data: JSON.stringify(formData),
             async: true,
@@ -139,7 +139,7 @@
         });
     }
     // Set up interval for auto-save 
-    setInterval(autoSave, 3000);
+    setInterval(autoSave, 1000);
 </script>
 
 

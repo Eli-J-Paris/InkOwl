@@ -8,15 +8,5 @@
         public DateTime CreatedAt { get; set; }
         public string? Content { get; set; }
 
-        //public Article()
-        //{
-        //    Title = "Untitled Article";
-        //    Content = "Empty Article";
-        //}
-
-        //public static string UploadArticle()
-        //{
-
-        //}
     }
 }

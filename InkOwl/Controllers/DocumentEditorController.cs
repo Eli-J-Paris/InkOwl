@@ -31,8 +31,8 @@ namespace InkOwl.Controllers
         }
 
         [HttpPost]
-        [Route("/savenest/{nestId}/{articleId}/{noteId}")]
-        public async Task<IActionResult> AutoSaveNestChanges([FromBody] NestSaveHandler nestcontentsJSON, int nestId, int articleId, int noteId)
+        [Route("/savenest/{articleId}/{noteId}")]
+        public async Task<IActionResult> AutoSaveNestChanges([FromBody] NestSaveHandler nestcontentsJSON, int articleId, int noteId)
         {
             try
             {
@@ -137,11 +137,7 @@ namespace InkOwl.Controllers
         {
             var document = GetDocument(url);
             string articleContent = string.Empty;
-            // article.Content = document.DocumentNode.SelectSingleNode(contentXpath).InnerHtml;
 
-
-
-            //this will scrape the entire body if its not a turing article
             var htmlArticle = document.DocumentNode.SelectSingleNode("//body");
 
 
