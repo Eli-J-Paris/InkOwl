@@ -14,5 +14,20 @@ namespace InkOwl.DataAccess
         {
 
         }
+
+        public void DeleteArticlesFromNest(Nest nest)
+        {
+            var articles = nest.Articles;
+            Articles.RemoveRange(articles);
+            SaveChanges();
+        }
+
+        public void DeleteNotesFromNest(Nest nest)
+        {
+            var notes = nest.Notes;
+            TextDocs.RemoveRange(notes);
+            SaveChanges();
+        }
+
     }
 }

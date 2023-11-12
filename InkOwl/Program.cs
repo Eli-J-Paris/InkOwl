@@ -50,7 +50,7 @@ app.MapControllerRoute(
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
-    .WriteTo.File("logs/levelup.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+    .WriteTo.File("logs/InkOwl.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {

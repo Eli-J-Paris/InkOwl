@@ -1,20 +1,17 @@
 ﻿@model Nest
-
 @{
-    //aA = active Article
     var activeArticle = ViewBag.activeArticle;
     var activeNote = ViewBag.activeNote;
 }
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link href="~/css/ChatBotStyle.css" />
-<form method="post" action="/nest/update/@Model.Id/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id">
-    <input type="hidden" id="articleContent" name="articleContent" />
-    <input type="hidden" id="noteContent" name="noteContent" />
-    <input type="hidden" id="articleTitle" name="articleTitle" />
-    <input type="hidden" id="noteTitle" name="noteTitle" />
-    <input type="hidden" id="url" name="url" value="@Model.Articles[activeArticle].Url" />
+<form method="post" action="/nest/update/@Model.Id/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id" id="autoSaveForm">
+    <input type="hidden" id="articleContent" name="articleContent"/>
+    <input type="hidden" id="noteContent" name="noteContent"/>
+    <input type="hidden" id="articleTitle" name="articleTitle"/>
+    <input type="hidden" id="noteTitle" name="noteTitle"/>
+    <input type="hidden" id="urlContent" name="url"/>
 
-    <button type="submit">Save</button>
 </form>
 
 
@@ -32,12 +29,12 @@
             <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
         </svg>
     </button>
-    <input id="inputNoteTitle" name="NoteTitle" value="@Model.Notes[activeNote].Title" style="margin-left:33%" />
+    <input id="inputNoteTitle" name="noteTitle" value="@Model.Notes[activeNote].Title" style="margin-left:33%" />
 
 </div>
 
-
-<div class="nest-container">
+@*Both article and nest editors
+*@<div class="nest-container">
 
 
     <div class="article">
@@ -54,7 +51,7 @@
             <div>
                 <form method="post" action="/article/@Model.Id/@Model.Articles[activeArticle].Id/upload">
                     <label for="url">URL</label>
-                    <input type="text" id="url" name="url" value="@Model.Articles[activeArticle].Url" />
+                    <input type="text" id="inputUrl" name="url" value="@Model.Articles[activeArticle].Url" />
                     <input hidden name="articleTitle" value="@Model.Articles[activeArticle].Title" />
                     <button type="submit">Upload Article</button>
                 </form>
@@ -71,8 +68,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 @*Side Bar Element
@@ -109,9 +104,160 @@
 
 
 
+
+<!-- Include jQuery (optional) -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Function to perform auto-save
+    function autoSave() {
+        // Get form data
+
+        var formData = {
+            articleContent: document.getElementById("articleContent").value,
+            noteContent: document.getElementById("noteContent").value,
+            articleTitle: document.getElementById("articleTitle").value,
+            noteTitle: document.getElementById("noteTitle").value,
+            urlContent: document.getElementById("urlContent").value
+        };
+        // Use AJAX to send data to the server
+        $.ajax({
+            url: '/savenest/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id', 
+            type: 'POST',
+            data: JSON.stringify(formData),
+            async: true,
+            contentType: 'application/json',
+            success: function (response) {
+                // Handle success 
+                console.log('Auto-save successful');
+            },
+            error: function (error) {
+                // Handle errors
+                console.error('Auto-save failed', error);
+            }
+        });
+    }
+    // Set up interval for auto-save 
+    setInterval(autoSave, 1000);
+</script>
+
+
+
+
+
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="/js/QuillEditor.js"></script>
-<script src="~/js/URLPopup.js"></script>
+@*<script src="/js/QuillEditor.js"></script>
+*@<script src="~/js/URLPopup.js"></script>
+
+<script>
+
+
+
+    var toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+        [{ 'direction': 'rtl' }],                         // text direction
+
+        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+
+        ['clean']                                         // remove formatting button
+    ];
+
+
+    //might need to make this run on a loop to update every couple of seconds
+    //document.querySelector('form').addEventListener('submit', function (e) {
+    //    e.preventDefault();
+    //    var articleContent = quillArticle.root.innerHTML;
+    //    var noteContent = quillNote.root.innerHTML;
+    //    document.getElementById('articleContent').value = articleContent;
+    //    document.getElementById('noteContent').value = noteContent;
+
+
+    //    var articleTitle = document.getElementById('inputArticleTitle').value;
+    //    document.getElementById('articleTitle').value = articleTitle
+
+    //    var noteTitle = document.getElementById('inputNoteTitle').value;
+    //    document.getElementById('noteTitle').value = noteTitle;
+
+    //    this.submit(); // Submit the form with the editor content
+    //});
+
+    function updateForm() {
+        var articleContent = quillArticle.root.innerHTML;
+        document.getElementById('articleContent').value = articleContent;
+
+        var noteContent = quillNote.root.innerHTML;
+        document.getElementById('noteContent').value = noteContent;
+
+        var articleTitle = document.getElementById('inputArticleTitle').value;
+        document.getElementById('articleTitle').value = articleTitle;
+
+        var noteTitle = document.getElementById('inputNoteTitle').value;
+        document.getElementById('noteTitle').value = noteTitle;
+
+        var urlContent = document.getElementById('inputUrl').value;
+        document.getElementById('urlContent').value = urlContent;
+    }
+
+    setInterval(updateForm, 1000);
+
+    var quillArticle = new Quill('#article-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'// 'bubble'
+    });
+
+    var quillNote = new Quill('#note-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow' //'bubble'
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @*SideBar
 *@<script>
@@ -125,8 +271,6 @@
           dropdown.classList.toggle('show');
       }
 </script>
-
-
 @*SideBar*@
 <style>
     /* Sidebar styles */
@@ -168,8 +312,6 @@
             display: block;
         }
 </style>
-
-
 @*modal popup style *@
 <style>
 

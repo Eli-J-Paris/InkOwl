@@ -1,8 +1,12 @@
 ﻿using HtmlAgilityPack;
 using InkOwl.DataAccess;
 using InkOwl.Models;
+using InkOwl.Models.ChatGptModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Serilog;
+using static InkOwl.Controllers.AutoSaveApiController;
 
 namespace InkOwl.Controllers
 {
@@ -24,6 +28,23 @@ namespace InkOwl.Controllers
             UpdateNote(noteId, noteContent, noteTitle);
 
             return Redirect($"/nest/{nestId}");
+        }
+
+        [HttpPost]
+        [Route("/savenest/{articleId}/{noteId}")]
+        public async Task<IActionResult> AutoSaveNestChanges([FromBody] NestSaveHandler nestcontentsJSON, int articleId, int noteId)
+        {
+            try
+            {
+                UpdateArticle(articleId, nestcontentsJSON.ArticleContent, nestcontentsJSON.ArticleTitle, nestcontentsJSON.UrlContent);
+                UpdateNote(noteId, nestcontentsJSON.NoteContent, nestcontentsJSON.NoteTitle);
+            }
+            catch (Exception ex)
+            {
+                // Handle deserialization errors
+                Log.Error(ex, "Error processing JSON");
+            }
+            return Ok();
         }
 
 
@@ -116,11 +137,7 @@ namespace InkOwl.Controllers
         {
             var document = GetDocument(url);
             string articleContent = string.Empty;
-            // article.Content = document.DocumentNode.SelectSingleNode(contentXpath).InnerHtml;
 
-
-
-            //this will scrape the entire body if its not a turing article
             var htmlArticle = document.DocumentNode.SelectSingleNode("//body");
 
 
@@ -145,5 +162,6 @@ namespace InkOwl.Controllers
             return doc;
         }
 
+      
     }
 }

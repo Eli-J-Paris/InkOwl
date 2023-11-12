@@ -1,9 +1,7 @@
-﻿using HtmlAgilityPack;
-using InkOwl.DataAccess;
+﻿using InkOwl.DataAccess;
 using InkOwl.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace InkOwl.Controllers
 {
@@ -18,7 +16,7 @@ namespace InkOwl.Controllers
 
         [Route("/test")]
         [HttpGet]
-        public IActionResult Testing() 
+        public IActionResult Testing()
         {
             return View();
         }
@@ -45,10 +43,6 @@ namespace InkOwl.Controllers
             _context.Nests.Add(nest);
             _context.SaveChanges();
 
-            //Resets the cookies to zero prevent out of index range exception
-            Response.Cookies.Append("ActiveArticle", "0");
-            Response.Cookies.Append("ActiveNote", "0");
-
             return Redirect("/home");
         }
 
@@ -71,6 +65,9 @@ namespace InkOwl.Controllers
             {
                 activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
             }
+
+            Response.Cookies.Delete("ActiveArticle");
+            Response.Cookies.Delete("ActiveNote");
             return activeNote;
         }
         public int SetActiveArticle()
@@ -78,8 +75,12 @@ namespace InkOwl.Controllers
             int activeArticle = 0;
             if (Request.Cookies["ActiveArticle"] != null)
             {
-                 activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
+                activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
             }
+
+            Response.Cookies.Delete("ActiveArticle");
+            Response.Cookies.Delete("ActiveNote");
+
             return activeArticle;
         }
 
@@ -100,7 +101,9 @@ namespace InkOwl.Controllers
         [Route("/nest/delete/{id}")]
         public IActionResult DeleteNest(int id)
         {
-            var nest = _context.Nests.Where(n =>n.Id ==id).Include(n=>n.Articles).Include(n=>n.Notes).First();
+            var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
+            _context.DeleteArticlesFromNest(nest);
+            _context.DeleteNotesFromNest(nest);
             _context.Nests.Remove(nest);
             _context.SaveChanges();
 
@@ -114,6 +117,8 @@ namespace InkOwl.Controllers
         {
             return View();
         }
+
+
 
         //public IActionResult Privacy()
         //{
