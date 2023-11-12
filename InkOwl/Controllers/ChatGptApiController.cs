@@ -16,7 +16,6 @@ namespace InkOwl.Controllers
             _configuration = configuration;
         }
 
-
         [HttpPost]
         [Route("AskChatGPT")]
         public async Task<IActionResult> AskChatGPT([FromBody] string query)

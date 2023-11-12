@@ -20,7 +20,7 @@ var toolbarOptions = [
 ];
 
 
-
+//might need to make this run on a loop to update every couple of seconds
 document.querySelector('form').addEventListener('submit', function (e) {
     e.preventDefault();
     var articleContent = quillArticle.root.innerHTML;
@@ -38,6 +38,21 @@ document.querySelector('form').addEventListener('submit', function (e) {
     this.submit(); // Submit the form with the editor content
 });
 
+function updateForm() {
+    var articleContent = quillArticle.root.innerHTML;
+    var noteContent = quillNote.root.innerHTML;
+    document.getElementById('articleContent').value = articleContent;
+    document.getElementById('noteContent').value = noteContent;
+
+    var articleTitle = document.getElementById('inputArticleTitle').value;
+    document.getElementById('articleTitle').value = articleTitle;
+
+    var noteTitle = document.getElementById('inputNoteTitle').value;
+    document.getElementById('noteTitle').value = noteTitle;
+}
+
+setInterval(updateForm, 5000);
+
 var quillArticle = new Quill('#article-editor', {
     modules: {
         toolbar: toolbarOptions
@@ -51,7 +66,7 @@ var quillNote = new Quill('#note-editor', {
         toolbar: toolbarOptions
     },
     placeholder: 'Compose an epic...',
-    theme: 'snow' /*'bubble'*/
+    theme: 'snow' //'bubble'
 });
 
 

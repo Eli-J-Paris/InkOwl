@@ -1,8 +1,12 @@
 ﻿using HtmlAgilityPack;
 using InkOwl.DataAccess;
 using InkOwl.Models;
+using InkOwl.Models.ChatGptModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Serilog;
+using static InkOwl.Controllers.AutoSaveApiController;
 
 namespace InkOwl.Controllers
 {
@@ -24,6 +28,23 @@ namespace InkOwl.Controllers
             UpdateNote(noteId, noteContent, noteTitle);
 
             return Redirect($"/nest/{nestId}");
+        }
+
+        [HttpPost]
+        [Route("/savenest/{nestId}/{articleId}/{noteId}")]
+        public async Task<IActionResult> AutoSaveNestChanges([FromBody] NestSaveHandler nestcontentsJSON, int nestId, int articleId, int noteId)
+        {
+            try
+            {
+                UpdateArticle(articleId, nestcontentsJSON.ArticleContent, nestcontentsJSON.ArticleTitle, nestcontentsJSON.UrlContent);
+                UpdateNote(noteId, nestcontentsJSON.NoteContent, nestcontentsJSON.NoteTitle);
+            }
+            catch (Exception ex)
+            {
+                // Handle deserialization errors
+                Log.Error(ex, "Error processing JSON");
+            }
+            return Ok();
         }
 
 
@@ -145,5 +166,6 @@ namespace InkOwl.Controllers
             return doc;
         }
 
+      
     }
 }
