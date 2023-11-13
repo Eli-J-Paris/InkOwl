@@ -14,7 +14,6 @@
 
 </form>
 
-
 @*Side bar toggle*@
 <div style="text-align:center;">
     <button onclick="toggleSidebar()" style="background-color:transparent"><img src="/images/sidebartoggle.png"  width="20px" height="20px"/></button>
@@ -71,13 +70,17 @@
 
 @*Side Bar Element
 *@<div class="sidebar sidebutton " id="sidebar">
-    <form method="post" action="/nest/@Model.Id/addarticle">
-        <button type="submit" class="sidebutton" >Add Article</button>
-    </form>
-    <form method="post" action="/nest/@Model.Id/addnote">
-        <button type="submit" class="sidebutton">Add Note</button>
-    </form>
-    <a href="#" class="dropdown-toggle" onclick="toggleDropdown('articles-dropdown')">Articles</a>
+    
+    
+    <div style="display:flex">
+            <a href="#" class="dropdown-toggle" onclick="toggleDropdown('articles-dropdown')">Articles</a>
+            <form method="post" action="/nest/@Model.Id/addarticle">
+                <button type="submit" class="sidebutton" ><img  class="addimage"src="/images/kisspng-plus-and-minus-signs-computer-icons-plus-minus-sig-positive-vector-5adf8916e6f890.7023559515245990629461.png" width="44px" height="44px"/></button>
+            </form>
+    </div>
+
+
+
     <div class="dropdown" id="articles-dropdown">
         @for (int i = 0; i < Model.Articles.Count; i++)
         {
@@ -88,7 +91,20 @@
         }
 
     </div>
-    <a href="#" class="dropdown-toggle" onclick="toggleDropdown('notes-dropdown')">Notes</a>
+
+
+
+    <div style="display:flex">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown('notes-dropdown')">Notes</a>
+        <form method="post" action="/nest/@Model.Id/addnote">
+                <button type="submit" class="sidebutton"><img class="addimage"src="/images/kisspng-plus-and-minus-signs-computer-icons-plus-minus-sig-positive-vector-5adf8916e6f890.7023559515245990629461.png" width="44px" height="44px"/></button>
+        </form>
+    </div>
+
+
+
+
+
     <div class="dropdown" id="notes-dropdown">
         @for (int i = 0; i < Model.Notes.Count; i++)
         {
@@ -227,21 +243,6 @@
 </script>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @*SideBar
 *@<script>
       function toggleSidebar() {
@@ -263,11 +264,20 @@
 
 
 .sidebutton{
-    background-color:#62A8AC
+    background-color:#5D6098
 }
 .sidebutton button:hover{
     color:white;
 }
+
+.addimage{
+     
+}
+
+.addimage:hover{
+        filter: drop-shadow(0 0 0.75rem white);
+}
+
     .sidebar {
         margin-top:56px;
         height: 100%;
@@ -275,7 +285,8 @@
         position: fixed;
         top:0;
         left: -250px;
-        background-color: #62A8AC;
+        background-color: #5D6098;
+         filter: drop-shadow(0 0 0.2rem black);
         overflow-x: hidden;
         transition: 0.3s;
         padding-top: 60px;

@@ -16,7 +16,7 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color:#50858B;
+    background-color: #2F97C1;
 }
 
 .nest-container {
@@ -27,7 +27,8 @@ body {
 
 .article {
     width: 50%; /* Set a fixed width for the container */
-    background-color: white;
+    background-color: #FCF4F7;
+    filter: drop-shadow(0 0 0.75rem black);
 }
 
 
@@ -35,20 +36,22 @@ body {
     height: 90%;
     max-height: 69vh; /* Set a fixed height for the container */
     overflow: auto; /* Add a scrollbar when content overflows */
-    background-color: white;
+    background-color: #FCF4F7;
 }
 
 .notes {
     width: 50%;
     /*height: 100%;*/
-    min-height: 100vh;
-    background-color: white;
+    min-height: 76vh;
+    background-color: #FCF4F7;
     overflow: auto;
+    filter: drop-shadow(0 0 0.75rem black);
 }
 .notes-editor {
     height: 90%;
-    max-height: 69vh; 
-    overflow: auto; 
+    max-height: 69vh;
+    overflow: auto;
+    background-color: #FCF4F7;
 }
 
 .chat-bot{
@@ -57,12 +60,8 @@ body {
     bottom: 5%;
 }
 
-/*.nest-header{
-    
-    position:relative;
-}
 
-#inputNoteTitle{
-    position:absolute;
-    justify-content:end
-}*/
+.navbar-home {
+    background-color: #FFD685!important;
+   
+}
