@@ -39,7 +39,6 @@
 
     <div class="article">
 
-
         <div id="article-editor" class="article-editor">
             @*later will be active int*@
             @Html.Raw(Model.Articles[activeArticle].Content)
@@ -84,7 +83,7 @@
         {
             <form method="post" action="/nest/@Model.Id/activearticle">
                 <input type="hidden" name="articleIndex" value="@i">
-                <button type="submit"> @Model.Articles[i].Title</button>
+                <button type="submit"> @Model.Articles[i].Title :@i</button>
             </form>
         }
 
@@ -95,7 +94,7 @@
         {
             <form method="post" action="/nest/@Model.Id/activenote">
                 <input type="hidden" name="noteIndex" value="@i">
-                <button type="submit"> @Model.Notes[i].Title</button>
+                <button type="submit"> @Model.Notes[i].Title :@i</button>
             </form>
         }
     </div>
