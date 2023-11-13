@@ -105,6 +105,30 @@ namespace InkOwl.Controllers
             return Redirect($"/nest/{nestId}");
         }
 
+
+        [HttpPost]
+        [Route("/nest/{nestId}/deletenote/{noteid}")]
+        public IActionResult DeleteNoteFromNest(int nestId,int noteId)
+        {
+            var note = _context.TextDocs.Find(noteId);
+            _context.TextDocs.Remove(note);
+            _context.SaveChanges();
+
+            return Redirect($"/nest/{nestId}");
+        }
+
+        [HttpPost]
+        [Route("/nest/{nestId}/deletearticle/{articleid}")]
+        public IActionResult DeleteArticleFromNest(int nestId,int articleId)
+        {
+            var article = _context.Articles.Find(articleId);
+            _context.Articles.Remove(article);
+            _context.SaveChanges();
+
+            return Redirect($"/nest/{nestId}");
+
+        }
+
         public void UpdateArticle(int articleId, string articleContent, string articleTitle, string url)
         {
             var article = _context.Articles.Find(articleId);

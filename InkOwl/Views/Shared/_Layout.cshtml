@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string nestTitle = ViewBag.NestTitle;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,29 +11,29 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InkOwl.styles.css" asp-append-version="true" />
-@*    <link rel="stylesheet" href="~/css/Journal.css"/>
-*@</head>
+    @*    <link rel="stylesheet" href="~/css/Journal.css"/>
+    *@
+</head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-home">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Ink Owl<img src="/images/InkOwl.png" width="32px" height="32px"/></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="margin-right:0px;">Ink Owl<img src="/images/InkOwl.png" width="32px" height="32px" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item" style="">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">H</a>
-                        </li>
-                        <li>
-                            <div style="text-align:center;">
-                                <button onclick="toggleSidebar()" style="background-color:transparent"><img src="/images/sidebartoggle.png" width="20px" height="20px" /></button>
-                            </div>
-                        </li>
-                       
-                    </ul>
+                <div class="navbar-collapse collapse d-sm-inline-flex ">
+                    @if (nestTitle != null)
+                    {
+                        <div>
+                            <button onclick="toggleSidebar()" style="background-color:transparent"><img src="/images/sidebartoggle.png" width="20px" height="20px" /></button>
+                        </div>
+                        <div class="text-center mx-auto" style="text-align:center; position:relative;">
+                            <h2>@nestTitle</h2>
+                        </div>
+                    }
+
                 </div>
             </div>
         </nav>
@@ -40,10 +44,10 @@
         </main>
     </div>
 
-@*    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - InkOwl - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    @*    <footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2023 - InkOwl - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
     </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

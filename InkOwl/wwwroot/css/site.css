@@ -41,8 +41,8 @@ body {
 
 .notes {
     width: 50%;
-    /*height: 100%;*/
-    min-height: 76vh;
+/*    height: 100%;
+*/    min-height: 76.1vh;
     background-color: #FCF4F7;
     overflow: auto;
     filter: drop-shadow(0 0 0.75rem black);

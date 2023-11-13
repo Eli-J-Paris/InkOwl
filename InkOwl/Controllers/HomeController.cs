@@ -54,7 +54,17 @@ namespace InkOwl.Controllers
             ViewBag.activeNote = SetActiveNote();
 
             var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
+
+            ChangeNavBar(nest);
+
             return View(nest);
+        }
+
+
+
+        public void ChangeNavBar(Nest nest)
+        {
+            ViewBag.NestTitle = nest.Title;
         }
 
 
@@ -119,7 +129,7 @@ namespace InkOwl.Controllers
         }
 
 
-
+        
         //public IActionResult Privacy()
         //{
         //    return View();
