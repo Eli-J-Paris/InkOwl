@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  
 }
 
 @media (min-width: 768px) {
@@ -14,37 +15,39 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color:#50858B;
 }
 
 .nest-container {
     display: flex;
     position: relative;
     column-gap: 10px;
-    
 }
 
 .article {
     width: 50%; /* Set a fixed width for the container */
-
+    background-color: white;
 }
 
 
 .article-editor {
     height: 90%;
-    max-height: 100vh; /* Set a fixed height for the container */
+    max-height: 69vh; /* Set a fixed height for the container */
     overflow: auto; /* Add a scrollbar when content overflows */
+    background-color: white;
 }
 
 .notes {
     width: 50%;
     /*height: 100%;*/
     min-height: 100vh;
+    background-color: white;
     overflow: auto;
 }
 .notes-editor {
     height: 90%;
-    max-height: 100vh; 
+    max-height: 69vh; 
     overflow: auto; 
 }
 

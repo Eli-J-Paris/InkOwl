@@ -17,7 +17,7 @@
 
 @*Side bar toggle*@
 <div style="text-align:center;">
-    <button onclick="toggleSidebar()">Toggle Sidebar</button>
+    <button onclick="toggleSidebar()" style="background-color:transparent"><img src="/images/sidebartoggle.png"  width="20px" height="20px"/></button>
 </div>
 
 
@@ -70,12 +70,12 @@
 
 
 @*Side Bar Element
-*@<div class="sidebar" id="sidebar">
+*@<div class="sidebar sidebutton " id="sidebar">
     <form method="post" action="/nest/@Model.Id/addarticle">
-        <button type="submit">Add Article</button>
+        <button type="submit" class="sidebutton" >Add Article</button>
     </form>
     <form method="post" action="/nest/@Model.Id/addnote">
-        <button type="submit">Add Note</button>
+        <button type="submit" class="sidebutton">Add Note</button>
     </form>
     <a href="#" class="dropdown-toggle" onclick="toggleDropdown('articles-dropdown')">Articles</a>
     <div class="dropdown" id="articles-dropdown">
@@ -83,7 +83,7 @@
         {
             <form method="post" action="/nest/@Model.Id/activearticle">
                 <input type="hidden" name="articleIndex" value="@i">
-                <button type="submit"> @Model.Articles[i].Title :@i</button>
+                <button type="submit" class="sidebutton"> @Model.Articles[i].Title :@i</button>
             </form>
         }
 
@@ -94,7 +94,7 @@
         {
             <form method="post" action="/nest/@Model.Id/activenote">
                 <input type="hidden" name="noteIndex" value="@i">
-                <button type="submit"> @Model.Notes[i].Title :@i</button>
+                <button type="submit" class="sidebutton"> @Model.Notes[i].Title :@i</button>
             </form>
         }
     </div>
@@ -242,22 +242,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @*SideBar
 *@<script>
       function toggleSidebar() {
@@ -273,13 +257,25 @@
 @*SideBar*@
 <style>
     /* Sidebar styles */
+    body, html {
+    overflow: hidden;
+}
+
+
+.sidebutton{
+    background-color:#62A8AC
+}
+.sidebutton button:hover{
+    color:white;
+}
     .sidebar {
+        margin-top:56px;
         height: 100%;
         width: 250px;
         position: fixed;
-        top: 0;
+        top:0;
         left: -250px;
-        background-color: #333;
+        background-color: #62A8AC;
         overflow-x: hidden;
         transition: 0.3s;
         padding-top: 60px;
@@ -293,7 +289,7 @@
             padding: 8px 8px 8px 32px;
             text-decoration: none;
             font-size: 20px;
-            color: #818181;
+            color: black;
             display: block;
             transition: 0.3s;
         }
@@ -302,6 +298,7 @@
                 color: #f1f1f1;
             }
 
+          
     /* Dropdown styles */
     .dropdown {
         display: none;
