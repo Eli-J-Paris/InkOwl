@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InkOwl.Migrations
 {
     [DbContext(typeof(InkOwlContext))]
-    [Migration("20231106223207_CreateDataBase")]
-    partial class CreateDataBase
+    [Migration("20231112233751_createDB")]
+    partial class createDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
