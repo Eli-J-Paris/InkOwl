@@ -7,6 +7,7 @@
         public string? Url { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? Content { get; set; }
+        public Nest Nest { get; set; }
 
     }
 }

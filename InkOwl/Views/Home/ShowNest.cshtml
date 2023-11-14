@@ -2,6 +2,8 @@
 @{
     var activeArticle = ViewBag.activeArticle;
     var activeNote = ViewBag.activeNote;
+    if (activeArticle == null) activeArticle = 0;
+    if (activeNote == null) activeNote = 0;
 }
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link href="~/css/ChatBotStyle.css" />
@@ -11,7 +13,6 @@
     <input type="hidden" id="articleTitle" name="articleTitle"/>
     <input type="hidden" id="noteTitle" name="noteTitle"/>
     <input type="hidden" id="urlContent" name="url"/>
-
 </form>
 
 
@@ -40,10 +41,10 @@
             <div class="flex">
                 <button class="btn-close">⨉</button>
             </div>
-            <div>
+            <div style="text-align:center">
                 <form method="post" action="/article/@Model.Id/@Model.Articles[activeArticle].Id/upload">
-                    <label for="url">URL</label>
-                    <input type="text" id="inputUrl" name="url" value="@Model.Articles[activeArticle].Url" />
+                    <label for="url">URL:</label>
+                    <input  type="text" id="inputUrl" name="url" value="@Model.Articles[activeArticle].Url" />
                     <input hidden name="articleTitle" value="@Model.Articles[activeArticle].Title" />
                     <button type="submit">Upload Article</button>
                 </form>
@@ -130,38 +131,7 @@
 
 <!-- Include jQuery (optional) -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    // Function to perform auto-save
-    function autoSave() {
-        // Get form data
 
-        var formData = {
-            articleContent: document.getElementById("articleContent").value,
-            noteContent: document.getElementById("noteContent").value,
-            articleTitle: document.getElementById("articleTitle").value,
-            noteTitle: document.getElementById("noteTitle").value,
-            urlContent: document.getElementById("urlContent").value
-        };
-        // Use AJAX to send data to the server
-        $.ajax({
-            url: '/savenest/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id', 
-            type: 'POST',
-            data: JSON.stringify(formData),
-            async: true,
-            contentType: 'application/json',
-            success: function (response) {
-                // Handle success 
-                console.log('Auto-save successful');
-            },
-            error: function (error) {
-                // Handle errors
-                console.error('Auto-save failed', error);
-            }
-        });
-    }
-    // Set up interval for auto-save 
-    setInterval(autoSave, 1000);
-</script>
 
 
 
@@ -240,7 +210,6 @@
         placeholder: 'Compose an epic...',
         theme: 'snow'// 'bubble'
     });
-
     var quillNote = new Quill('#note-editor', {
         modules: {
             toolbar: toolbarOptions
@@ -248,8 +217,43 @@
         placeholder: 'Compose an epic...',
         theme: 'snow' //'bubble'
     });
+
+
 </script>
 
+
+<script>
+    // Function to perform auto-save
+    function autoSave() {
+        // Get form data
+
+        var formData = {
+            articleContent: document.getElementById("articleContent").value,
+            noteContent: document.getElementById("noteContent").value,
+            articleTitle: document.getElementById("articleTitle").value,
+            noteTitle: document.getElementById("noteTitle").value,
+            urlContent: document.getElementById("urlContent").value
+        };
+        // Use AJAX to send data to the server
+        $.ajax({
+            url: '/savenest/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id',
+            type: 'POST',
+            data: JSON.stringify(formData),
+            async: true,
+            contentType: 'application/json',
+            success: function (response) {
+                // Handle success
+                console.log('Auto-save successful');
+            },
+            error: function (error) {
+                // Handle errors
+                console.error('Auto-save failed', error);
+            }
+        });
+    }
+    // Set up interval for auto-save
+    setInterval(autoSave, 1000);
+</script>
 
 @*SideBar
 *@<script>
@@ -280,7 +284,7 @@ input{
     box-sizing:border-box;
     transition:.3s;
   }
-  
+ 
   input:focus{
     border-color:dodgerBlue;
     box-shadow:0 0 8px 0 dodgerBlue;

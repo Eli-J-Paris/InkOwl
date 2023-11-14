@@ -67,6 +67,8 @@ namespace InkOwl.Controllers
             Article newArticle = new Article { Title = "Untitled Article" };
             var nest = _context.Nests.Find(nestId);
 
+            Response.Cookies.Append("ActiveArticle", "0");
+
             nest.Articles.Add(newArticle);
             _context.Nests.Update(nest);
             _context.SaveChanges();
@@ -81,6 +83,8 @@ namespace InkOwl.Controllers
             TextDoc newNote = new TextDoc { Title = "Untitled Notes" };
             var nest = _context.Nests.Find(nestId);
 
+            Response.Cookies.Append("ActiveNote", "0");
+
             nest.Notes.Add(newNote);
             _context.Nests.Update(nest);
             _context.SaveChanges();
@@ -92,6 +96,7 @@ namespace InkOwl.Controllers
         [Route("/nest/{nestId}/activearticle")]
         public IActionResult ChangeActiveArticle(int nestId, int articleIndex)
         {
+            Response.Cookies.Append("ActiveNest", nestId.ToString());
             Response.Cookies.Append("ActiveArticle", articleIndex.ToString());
             return Redirect($"/nest/{nestId}");
         }

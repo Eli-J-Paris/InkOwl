@@ -50,8 +50,12 @@ namespace InkOwl.Controllers
         [HttpGet]
         public IActionResult ShowNest(int id)
         {
-            ViewBag.activeArticle = SetActiveArticle();
-            ViewBag.activeNote = SetActiveNote();
+            //var nest = _context.Nests.Find(Request.Cookies["ActiveNest"]);
+            if (Request.Cookies["ActiveArticle"] != null)
+                ViewBag.activeArticle = SetActiveArticle();
+
+            if (Request.Cookies["ActiveNote"] != null)
+                ViewBag.activeNote = SetActiveNote();
 
             var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
 
@@ -68,18 +72,6 @@ namespace InkOwl.Controllers
         }
 
 
-        public int SetActiveNote()
-        {
-            int activeNote = 0;
-            if (Request.Cookies["ActiveNote"] != null)
-            {
-                activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
-            }
-
-            Response.Cookies.Delete("ActiveArticle");
-            Response.Cookies.Delete("ActiveNote");
-            return activeNote;
-        }
         public int SetActiveArticle()
         {
             int activeArticle = 0;
@@ -87,12 +79,22 @@ namespace InkOwl.Controllers
             {
                 activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
             }
-
             Response.Cookies.Delete("ActiveArticle");
-            Response.Cookies.Delete("ActiveNote");
 
             return activeArticle;
         }
+
+        public int SetActiveNote()
+        {
+            int activeNote = 0;
+            if (Request.Cookies["ActiveNote"] != null)
+            {
+                activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
+            }
+            Response.Cookies.Delete("ActiveNote");
+            return activeNote;
+        }
+        
 
         [HttpPost]
         [Route("/nest/edit/{id}")]
