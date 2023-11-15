@@ -2,6 +2,8 @@
 @{
     var activeArticle = ViewBag.activeArticle;
     var activeNote = ViewBag.activeNote;
+    if (activeArticle == null) activeArticle = 0;
+    if (activeNote == null) activeNote = 0;
 }
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/ChatBotStyle.css" />
