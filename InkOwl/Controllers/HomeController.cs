@@ -2,6 +2,7 @@
 using InkOwl.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace InkOwl.Controllers
 {
@@ -12,13 +13,6 @@ namespace InkOwl.Controllers
         public HomeController(InkOwlContext context)
         {
             _context = context;
-        }
-
-        [Route("/test")]
-        [HttpGet]
-        public IActionResult Testing()
-        {
-            return View();
         }
 
         [HttpGet]
@@ -49,39 +43,13 @@ namespace InkOwl.Controllers
         [Route("/nest/{id}")]
         [HttpGet]
         public IActionResult ShowNest(int id)
-        {
-            ViewBag.activeArticle = SetActiveArticle();
-            ViewBag.activeNote = SetActiveNote();
+        {    
+           var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
+            ViewBag.activeArticle = nest.ActiveArticleId;
+            ViewBag.activeNote = nest.ActiveNoteId;
+            ChangeNavBar(nest);
 
-            var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
             return View(nest);
-        }
-
-
-        public int SetActiveNote()
-        {
-            int activeNote = 0;
-            if (Request.Cookies["ActiveNote"] != null)
-            {
-                activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
-            }
-
-            Response.Cookies.Delete("ActiveArticle");
-            Response.Cookies.Delete("ActiveNote");
-            return activeNote;
-        }
-        public int SetActiveArticle()
-        {
-            int activeArticle = 0;
-            if (Request.Cookies["ActiveArticle"] != null)
-            {
-                activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
-            }
-
-            Response.Cookies.Delete("ActiveArticle");
-            Response.Cookies.Delete("ActiveNote");
-
-            return activeArticle;
         }
 
         [HttpPost]
@@ -94,7 +62,6 @@ namespace InkOwl.Controllers
             _context.SaveChanges();
 
             return Redirect("/home");
-
         }
 
         [HttpPost]
@@ -108,27 +75,41 @@ namespace InkOwl.Controllers
             _context.SaveChanges();
 
             return Redirect("/home");
-
         }
 
-        [Route("/chatbot")]
-        [HttpGet]
-        public IActionResult ChatBot()
+
+        //When going into a nest it will send the nests title to the layout and display it in the navbar
+        public void ChangeNavBar(Nest nest)
         {
-            return View();
+            ViewBag.NestTitle = nest.Title;
         }
 
 
 
-        //public IActionResult Privacy()
+        //Old way of changing the active article
+
+        //public int SetActiveArticle()
         //{
-        //    return View();
+        //    int activeArticle = 0;
+        //    if (Request.Cookies["ActiveArticle"] != null)
+        //    {
+        //        activeArticle = Convert.ToInt32(Request.Cookies["ActiveArticle"]);
+        //    }
+        //    Response.Cookies.Delete("ActiveArticle");
+
+        //    return activeArticle;
         //}
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
+        //public int SetActiveNote()
         //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //    int activeNote = 0;
+        //    if (Request.Cookies["ActiveNote"] != null)
+        //    {
+        //        activeNote = Convert.ToInt32(Request.Cookies["ActiveNote"]);
+        //    }
+        //    Response.Cookies.Delete("ActiveNote");
+        //    return activeNote;
         //}
+
     }
 }

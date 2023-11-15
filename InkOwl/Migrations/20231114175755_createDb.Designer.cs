@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InkOwl.Migrations
 {
     [DbContext(typeof(InkOwlContext))]
-    [Migration("20231112233751_createDB")]
-    partial class createDB
+    [Migration("20231114175755_createDb")]
+    partial class createDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace InkOwl.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<int?>("NestId")
+                    b.Property<int>("NestId")
                         .HasColumnType("integer")
                         .HasColumnName("nest_id");
 
@@ -96,6 +96,14 @@ namespace InkOwl.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ActiveArticleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("active_article_id");
+
+                    b.Property<int?>("ActiveNoteId")
+                        .HasColumnType("integer")
+                        .HasColumnName("active_note_id");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -127,7 +135,7 @@ namespace InkOwl.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<int?>("NestId")
+                    b.Property<int>("NestId")
                         .HasColumnType("integer")
                         .HasColumnName("nest_id");
 
@@ -146,18 +154,26 @@ namespace InkOwl.Migrations
 
             modelBuilder.Entity("InkOwl.Models.Article", b =>
                 {
-                    b.HasOne("InkOwl.Models.Nest", null)
+                    b.HasOne("InkOwl.Models.Nest", "Nest")
                         .WithMany("Articles")
                         .HasForeignKey("NestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_articles_nests_nest_id");
+
+                    b.Navigation("Nest");
                 });
 
             modelBuilder.Entity("InkOwl.Models.TextDoc", b =>
                 {
-                    b.HasOne("InkOwl.Models.Nest", null)
+                    b.HasOne("InkOwl.Models.Nest", "Nest")
                         .WithMany("Notes")
                         .HasForeignKey("NestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_text_docs_nests_nest_id");
+
+                    b.Navigation("Nest");
                 });
 
             modelBuilder.Entity("InkOwl.Models.Nest", b =>

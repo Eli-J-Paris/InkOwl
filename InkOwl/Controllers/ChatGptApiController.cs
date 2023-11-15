@@ -24,49 +24,46 @@ namespace InkOwl.Controllers
             string apiKey = _configuration["CHATGPT_APIKEY"];
             StringBuilder sb = new StringBuilder();
 
-            HttpClient oClient = new HttpClient();
-            oClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
-            ChatRequest oRequest = new ChatRequest();
-            oRequest.Model = "gpt-3.5-turbo";
+            ChatRequest request = new ChatRequest();
+            request.Model = "gpt-3.5-turbo";
 
-            ChatGptMessage oMessage = new ChatGptMessage();
-            oMessage.Role = "user";
-            oMessage.Content = query;
+            ChatGptMessage message = new ChatGptMessage();
+            message.Role = "user";
+            message.Content = query;
 
-            oRequest.Messages = new List<ChatGptMessage> { oMessage };
+            request.Messages = new List<ChatGptMessage> { message };
 
-            string oReqJSON = JsonConvert.SerializeObject(oRequest);
-            HttpContent oContent = new StringContent(oReqJSON, Encoding.UTF8, "application/json");
+            string reqJSON = JsonConvert.SerializeObject(request);
+            HttpContent content = new StringContent(reqJSON, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage oResponseMessage = await oClient.PostAsync(chatURL, oContent);
+            HttpResponseMessage responseMessage = await client.PostAsync(chatURL, content);
 
-            if (oResponseMessage.IsSuccessStatusCode)
+            if (responseMessage.IsSuccessStatusCode)
             {
-                string oResJSON = await oResponseMessage.Content.ReadAsStringAsync();
+                string resJSON = await responseMessage.Content.ReadAsStringAsync();
 
-                ChatResponse oResponse = JsonConvert.DeserializeObject<ChatResponse>(oResJSON);
+                ChatResponse response = JsonConvert.DeserializeObject<ChatResponse>(resJSON);
 
-                foreach (Choice c in oResponse.Choices)
+                foreach (Choice c in response.Choices)
                 {
                     sb.Append(c.Message.Content);
                 }
 
-                HttpChatGPTResponse oHttpResponse = new HttpChatGPTResponse()
+                HttpChatGPTResponse httpResponse = new HttpChatGPTResponse()
                 {
                     Success = true,
                     Data = sb.ToString()
                 };
 
-                return Ok(oHttpResponse);
+                return Ok(httpResponse);
             }
             else
             {
-                throw new HttpRequestException(oResponseMessage.ReasonPhrase);
+                throw new HttpRequestException(responseMessage.ReasonPhrase);
             }
         }
-
-
-
     }
 }

@@ -4,41 +4,33 @@
     var activeNote = ViewBag.activeNote;
 }
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<link href="~/css/ChatBotStyle.css" />
+<link rel="stylesheet" href="/css/ChatBotStyle.css" />
+<link rel="stylesheet" href="/css/ShowNestStyles.css" />
+
+
+
 <form method="post" action="/nest/update/@Model.Id/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id" id="autoSaveForm">
-    <input type="hidden" id="articleContent" name="articleContent"/>
-    <input type="hidden" id="noteContent" name="noteContent"/>
-    <input type="hidden" id="articleTitle" name="articleTitle"/>
-    <input type="hidden" id="noteTitle" name="noteTitle"/>
-    <input type="hidden" id="urlContent" name="url"/>
+    <input type="hidden" id="articleContent" name="articleContent" />
+    <input type="hidden" id="noteContent" name="noteContent" />
+    <input type="hidden" id="articleTitle" name="articleTitle" />
+    <input type="hidden" id="noteTitle" name="noteTitle" />
+    <input type="hidden" id="urlContent" name="url" />
 
 </form>
-
-
-@*Side bar toggle*@
-<div style="text-align:center;">
-    <button onclick="toggleSidebar()">Toggle Sidebar</button>
-</div>
-
-
 <div class="nest-header">
-    <h1 class="text-center">@Model.Title</h1>
-    <input id="inputArticleTitle" name="articleTitle" value="@Model.Articles[activeArticle].Title" style="margin-left:14%" />
+    <input id="inputArticleTitle" name="articleTitle" value="@Model.Articles[activeArticle].Title" style="margin-left:11%" />
     <button class="btn btn-open" data-modal-id="">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
             <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
         </svg>
     </button>
-    <input id="inputNoteTitle" name="noteTitle" value="@Model.Notes[activeNote].Title" style="margin-left:33%" />
+    <input id="inputNoteTitle" name="noteTitle" value="@Model.Notes[activeNote].Title" style="margin-left:25%" />
 
 </div>
 
 @*Both article and nest editors
 *@<div class="nest-container">
-
-
     <div class="article">
-
         <div id="article-editor" class="article-editor">
             @*later will be active int*@
             @Html.Raw(Model.Articles[activeArticle].Content)
@@ -47,19 +39,17 @@
             <div class="flex">
                 <button class="btn-close">⨉</button>
             </div>
-            <div>
+            <div style="text-align:center">
                 <form method="post" action="/article/@Model.Id/@Model.Articles[activeArticle].Id/upload">
-                    <label for="url">URL</label>
+                    <label for="url">URL:</label>
                     <input type="text" id="inputUrl" name="url" value="@Model.Articles[activeArticle].Url" />
                     <input hidden name="articleTitle" value="@Model.Articles[activeArticle].Title" />
                     <button type="submit">Upload Article</button>
                 </form>
             </div>
-
         </section>
         <div class="overlay hidden"></div>
     </div>
-
     <div class="notes">
 
         <div id="note-editor" class="notes-editor">
@@ -67,90 +57,91 @@
         </div>
     </div>
 </div>
-
-
 @*Side Bar Element
-*@<div class="sidebar" id="sidebar">
-    <form method="post" action="/nest/@Model.Id/addarticle">
-        <button type="submit">Add Article</button>
-    </form>
-    <form method="post" action="/nest/@Model.Id/addnote">
-        <button type="submit">Add Note</button>
-    </form>
-    <a href="#" class="dropdown-toggle" onclick="toggleDropdown('articles-dropdown')">Articles</a>
+*@<div class="sidebar sidebutton " id="sidebar">
+    <div style="display:flex">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown('articles-dropdown')">Articles</a>
+        <form method="post" action="/nest/@Model.Id/addarticle">
+            <button type="submit" class="sidebutton"><img class="addimage" src="/images/kisspng-plus-and-minus-signs-computer-icons-plus-minus-sig-positive-vector-5adf8916e6f890.7023559515245990629461.png" width="44px" height="44px" /></button>
+        </form>
+    </div>
     <div class="dropdown" id="articles-dropdown">
         @for (int i = 0; i < Model.Articles.Count; i++)
         {
-            <form method="post" action="/nest/@Model.Id/activearticle">
-                <input type="hidden" name="articleIndex" value="@i">
-                <button type="submit"> @Model.Articles[i].Title :@i</button>
-            </form>
+            <div style="display:flex">
+                <form method="post" action="/nest/@Model.Id/activearticle">
+                    <input type="hidden" name="articleIndex" value="@i">
+                    <button type="submit" class="sidebutton"> @Model.Articles[i].Title :@i</button>
+                </form>
+                @if (Model.Articles.Count > 1)
+                {
+                    <form method="post" action="/nest/@Model.Id/deletearticle/@Model.Articles[i].Id">
+                        <button class="sidebutton" type="submit"><img class="addimage" src="/images/TrashCan.png" width="24px" height="24px" /></button>
+                    </form>
+                }
+            </div>
         }
-
     </div>
-    <a href="#" class="dropdown-toggle" onclick="toggleDropdown('notes-dropdown')">Notes</a>
+    <div style="display:flex">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown('notes-dropdown')">Notes</a>
+        <form method="post" action="/nest/@Model.Id/addnote">
+            <button type="submit" class="sidebutton"><img class="addimage" src="/images/kisspng-plus-and-minus-signs-computer-icons-plus-minus-sig-positive-vector-5adf8916e6f890.7023559515245990629461.png" width="44px" height="44px" /></button>
+        </form>
+    </div>
     <div class="dropdown" id="notes-dropdown">
         @for (int i = 0; i < Model.Notes.Count; i++)
         {
-            <form method="post" action="/nest/@Model.Id/activenote">
-                <input type="hidden" name="noteIndex" value="@i">
-                <button type="submit"> @Model.Notes[i].Title :@i</button>
-            </form>
+            <div style="display:flex">
+                <form method="post" action="/nest/@Model.Id/activenote">
+                    <input type="hidden" name="noteIndex" value="@i">
+                    <button type="submit" class="sidebutton"> @Model.Notes[i].Title :@i</button>
+                </form>
+                @if (Model.Notes.Count > 1)
+                {
+                    <form method="post" action="/nest/@Model.Id/deletenote/@Model.Notes[i].Id">
+                        <button class="sidebutton" type="submit"><img class="addimage" src="/images/TrashCan.png" width="24px" height="24px" /></button>
+                    </form>
+                }
+            </div>
         }
     </div>
 </div>
 
 
 
-
-
-<!-- Include jQuery (optional) -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    // Function to perform auto-save
-    function autoSave() {
-        // Get form data
-
-        var formData = {
-            articleContent: document.getElementById("articleContent").value,
-            noteContent: document.getElementById("noteContent").value,
-            articleTitle: document.getElementById("articleTitle").value,
-            noteTitle: document.getElementById("noteTitle").value,
-            urlContent: document.getElementById("urlContent").value
-        };
-        // Use AJAX to send data to the server
-        $.ajax({
-            url: '/savenest/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id', 
-            type: 'POST',
-            data: JSON.stringify(formData),
-            async: true,
-            contentType: 'application/json',
-            success: function (response) {
-                // Handle success 
-                console.log('Auto-save successful');
-            },
-            error: function (error) {
-                // Handle errors
-                console.error('Auto-save failed', error);
-            }
-        });
-    }
-    // Set up interval for auto-save 
-    setInterval(autoSave, 1000);
-</script>
+@*ChatBot pop up*@
+<div id="popup" class="popup">
+    <section class="msger">
+        <div class="msger-header">
+            <div class="msger-header-title">
+                <img src="/images/InkOwl.png" width="64px" height="64" />
+                <i class="fas fa-comment-alt"></i> InkOwl <small><small> powered by ChatGPT</small></small>
+            </div>
+            <div class="msger-header-options">
+                <span><i class="fas fa-cog"></i></span>
+            </div>
+            <button id="closePopupButton" style="margin-top:30px; margin-right:20px;" class="btn-close">⨉</button>
+        </div>
+        <div class="msger-chat">
+        </div>
+        <form class="msger-inputarea">
+            <input id="messageInput" type="text" class="msger-input" placeholder="Enter your query..." />
+            <button id="sendButton" class="msger-send-btn">Send</button>
+        </form>
+    </section>
+</div>
+<button id="showPopupButton" class="inkowl" style=""><img src="/images/InkOwl.png" width="128px" height="128px" /></button>
 
 
 
 
-
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+*@<script src="/js/ChatBotScript.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-@*<script src="/js/QuillEditor.js"></script>
-*@<script src="~/js/URLPopup.js"></script>
+<script src="~/js/URLPopup.js"></script>
 
+@*Making the quill editor*@
 <script>
-
-
-
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
@@ -171,24 +162,24 @@
         ['clean']                                         // remove formatting button
     ];
 
+    var quillArticle = new Quill('#article-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'// 'bubble'
+    });
+    var quillNote = new Quill('#note-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow' //'bubble'
+    });
+</script>
 
-    //might need to make this run on a loop to update every couple of seconds
-    //document.querySelector('form').addEventListener('submit', function (e) {
-    //    e.preventDefault();
-    //    var articleContent = quillArticle.root.innerHTML;
-    //    var noteContent = quillNote.root.innerHTML;
-    //    document.getElementById('articleContent').value = articleContent;
-    //    document.getElementById('noteContent').value = noteContent;
-
-
-    //    var articleTitle = document.getElementById('inputArticleTitle').value;
-    //    document.getElementById('articleTitle').value = articleTitle
-
-    //    var noteTitle = document.getElementById('inputNoteTitle').value;
-    //    document.getElementById('noteTitle').value = noteTitle;
-
-    //    this.submit(); // Submit the form with the editor content
-    //});
+@*Updates form every 1/2 second*@
+<script>
 
     function updateForm() {
         var articleContent = quillArticle.root.innerHTML;
@@ -206,191 +197,57 @@
         var urlContent = document.getElementById('inputUrl').value;
         document.getElementById('urlContent').value = urlContent;
     }
+    setInterval(updateForm, 500);
 
-    setInterval(updateForm, 1000);
-
-    var quillArticle = new Quill('#article-editor', {
-        modules: {
-            toolbar: toolbarOptions
-        },
-        placeholder: 'Compose an epic...',
-        theme: 'snow'// 'bubble'
-    });
-
-    var quillNote = new Quill('#note-editor', {
-        modules: {
-            toolbar: toolbarOptions
-        },
-        placeholder: 'Compose an epic...',
-        theme: 'snow' //'bubble'
-    });
 </script>
 
+@*AutoSave*@
+<script>
+    // Function to perform auto-save
+    function autoSave() {
+        // Get form data
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*SideBar
-*@<script>
-      function toggleSidebar() {
-          var sidebar = document.getElementById('sidebar');
-          sidebar.classList.toggle('show');
-      }
-
-      function toggleDropdown(dropdownId) {
-          var dropdown = document.getElementById(dropdownId);
-          dropdown.classList.toggle('show');
-      }
-</script>
-@*SideBar*@
-<style>
-    /* Sidebar styles */
-    .sidebar {
-        height: 100%;
-        width: 250px;
-        position: fixed;
-        top: 0;
-        left: -250px;
-        background-color: #333;
-        overflow-x: hidden;
-        transition: 0.3s;
-        padding-top: 60px;
-    }
-
-        .sidebar.show {
-            left: 0;
-        }
-
-        .sidebar a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 20px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
-
-            .sidebar a:hover {
-                color: #f1f1f1;
+        var formData = {
+            articleContent: document.getElementById("articleContent").value,
+            noteContent: document.getElementById("noteContent").value,
+            articleTitle: document.getElementById("articleTitle").value,
+            noteTitle: document.getElementById("noteTitle").value,
+            urlContent: document.getElementById("urlContent").value
+        };
+        // Use AJAX to send data to the server
+        $.ajax({
+            url: '/savenest/@Model.Id/@Model.Articles[activeArticle].Id/@Model.Notes[activeNote].Id',
+            type: 'POST',
+            data: JSON.stringify(formData),
+            //async: true,
+            contentType: 'application/json',
+            success: function (response) {
+                // Handle success
+                console.log('Auto-save successful');
+            },
+            error: function (error) {
+                // Handle errors
+                console.error('Auto-save failed', error);
             }
+        });
+    }
+    // Set up interval for auto-save
+    setInterval(autoSave, 1000);
+</script>
 
-    /* Dropdown styles */
-    .dropdown {
-        display: none;
+@*toggle Side bar*@
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('show');
     }
 
-        .dropdown.show {
-            display: block;
-        }
-</style>
-@*modal popup style *@
-<style>
-
-    .modal {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.4rem;
-        width: 450px;
-        padding: 1.3rem;
-        min-height: 250px;
-        max-height: 250px;
-        position: fixed;
-        z-index: 2;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 15px;
+    function toggleDropdown(dropdownId) {
+        var dropdown = document.getElementById(dropdownId);
+        dropdown.classList.toggle('show');
     }
+</script>
 
-        .modal .flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
 
-        .modal input {
-            padding: 0.7rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 0.9em;
-        }
 
-        .modal p {
-            font-size: 0.9rem;
-            color: #777;
-            margin: 0.4rem 0 0.2rem;
-        }
-
-    button {
-        cursor: pointer;
-        border: none;
-        font-weight: 600;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 0.8rem 1.4rem;
-        font-weight: 700;
-        background-color: black;
-        color: white;
-        border-radius: 5px;
-        text-align: center;
-        font-size: 1em;
-    }
-
-    .btn-close {
-        transform: translate(10px, -20px);
-        padding: 0.5rem 0.7rem;
-        background: #eee;
-        border-radius: 50%;
-    }
-
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(3px);
-        z-index: 1;
-    }
-
-    .hidden {
-        display: none;
-    }
-</style>
 
