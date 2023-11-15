@@ -65,8 +65,5 @@ namespace InkOwl.Controllers
                 throw new HttpRequestException(responseMessage.ReasonPhrase);
             }
         }
-
-
-
     }
 }

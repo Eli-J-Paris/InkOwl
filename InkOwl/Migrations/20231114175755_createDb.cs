@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InkOwl.Migrations
 {
     /// <inheritdoc />
-    public partial class createDB : Migration
+    public partial class createDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,7 +33,9 @@ namespace InkOwl.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     title = table.Column<string>(type: "text", nullable: true),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    active_article_id = table.Column<int>(type: "integer", nullable: true),
+                    active_note_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,7 +52,7 @@ namespace InkOwl.Migrations
                     url = table.Column<string>(type: "text", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     content = table.Column<string>(type: "text", nullable: true),
-                    nest_id = table.Column<int>(type: "integer", nullable: true)
+                    nest_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,7 +61,8 @@ namespace InkOwl.Migrations
                         name: "fk_articles_nests_nest_id",
                         column: x => x.nest_id,
                         principalTable: "nests",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,7 +74,7 @@ namespace InkOwl.Migrations
                     title = table.Column<string>(type: "text", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     content = table.Column<string>(type: "text", nullable: true),
-                    nest_id = table.Column<int>(type: "integer", nullable: true)
+                    nest_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,7 +83,8 @@ namespace InkOwl.Migrations
                         name: "fk_text_docs_nests_nest_id",
                         column: x => x.nest_id,
                         principalTable: "nests",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
