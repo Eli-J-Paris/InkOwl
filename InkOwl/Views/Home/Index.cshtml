@@ -4,9 +4,12 @@
 }
 
 <form method="post" action="/nest/new">
-    <button type="submit"> New Nest</button>
+    <div class="mx-auto text-center">
+        <button type="submit" class="new-nest mx-auto text-center">New Nest +</button>
+    </div>
 </form>
-
+<br />
+<br />
 <div class="text-center" style="position:relative">
 
     @if (Model.Count == 0)
@@ -20,26 +23,31 @@
             var nest = Model[i];
             <div>
                 <div style="display:inline-flex">
-                    
-                    <h1><a href="/nest/@nest.Id">@nest.Title: @nest.Id </a></h1>
+                    <div class="wrapper">
+                        <a class="sixth before after link-to-nest" href="/nest/@nest.Id">@nest.Title</a>
+                    </div>
+
+
                     <button class="btn btn-open" data-modal-id="@i">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                             <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
                         </svg>
                     </button>
                 </div>
+
                 <section class="modal hidden" id="modal-@i">
                     <div class="flex">
                         <button class="btn-close">⨉</button>
                     </div>
                     <div>
                         <form method="post" action="/nest/edit/@nest.Id">
-                            <label for="Title">DocumentTitle</label>
-                            <input type="text" id="Title" name="Title" value="@nest.Title">
+                            <label for="Title">DocumentTitle:</label>
+                            <input type="text" id="Title" name="Title" value="@nest.Title" maxlength="90">
                             <button type="submit" class="btn">Rename</button>
                         </form>
+                       
                         <form method="post" action="/nest/delete/@nest.Id">
-                            <button type="submit">Delete</button>
+                            <button type="submit" class="redbtn">Delete</button>
                         </form>
                     </div>
 
@@ -49,8 +57,82 @@
         }
     }
 </div>
+<style>
+    .new-nest {
+        background: #fff;
+        color: #2F97C1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 3px #ccc;
+        transition: transform 100ms;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+        .new-nest:hover {
+            transform: translateY(1px);
+            box-shadow: 0 2px #ccc;
+        }
+
+/*all link styles*/
+
+    .wrapper {
+        margin-top: 10px;
+    }
+
+    .link-to-nest{
+
+    }
+
+        .link-to-nest, .link-to-nest:visited, .link-to-nest:hover, .link-to-nest:active {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        position: relative;
+        transition: 0.5s color ease;
+        text-decoration: none;
+        font-family: Impact;
+        color: black;
+        font-size: 2.5em;
+    }
+
+            .link-to-nest:hover {
+            color: #FFD685;
+        }
+
+            .link-to-nest.before:before, .link-to-nest.after:after {
+            content: "";
+            transition: 0.5s all ease;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            position: absolute;
+        }
 
 
+            .link-to-nest.after:after {
+            bottom: -0.25em;
+        }
+
+            .link-to-nest.before:before, .link-to-nest.after:after {
+            height: 5px;
+            height: 0.35rem;
+            width: 0;
+            background: #FFD685;
+        }
+
+            .link-to-nest.third:after, .link-to-nest.sixth:before, .link-to-nest.sixth:after {
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
+
+
+
+            .link-to-nest.before:hover:before, .link-to-nest.after:hover:after {
+            width: 100%;
+        }
+
+       
+</style>
 
 <style>
 
@@ -62,7 +144,7 @@
         width: 450px;
         padding: 1.3rem;
         min-height: 250px;
-        max-height:250px;
+        max-height: 250px;
         position: fixed;
         z-index: 2;
         /*top: 20%;*/
@@ -72,7 +154,7 @@
         background-color: white;
         border: 1px solid #ddd;
         border-radius: 15px;
-        text-align:center;
+        text-align: center;
     }
 
         .modal .flex {
@@ -104,17 +186,24 @@
         display: inline-block;
         padding: 0.8rem 1.4rem;
         font-weight: 700;
-        background-color: black;
+        background-color: #5D6098;
         color: white;
         border-radius: 5px;
         text-align: center;
         font-size: 1em;
     }
-/*
-     .btn-open {
-                    position: absolute;
-                    bottom: 150px;
-                }*/
+
+
+    .redbtn {
+        display: inline-block;
+        padding: 0.8rem 1.4rem;
+        font-weight: 700;
+        background-color: #880D1E;
+        color: white;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 1em;
+    }
 
     .btn-close {
         transform: translate(10px, -20px);

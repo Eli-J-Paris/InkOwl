@@ -149,7 +149,7 @@ namespace InkOwl.Controllers
         {
             var document = GetDocument(url);
             string articleContent = string.Empty;
-
+           
             var htmlArticle = document.DocumentNode.SelectSingleNode("//body");
 
 
@@ -168,9 +168,24 @@ namespace InkOwl.Controllers
 
         static HtmlDocument GetDocument(string url)
         {
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(url);
-            return doc;
+            try
+            {
+                HtmlWeb web = new HtmlWeb();
+                HtmlDocument doc = web.Load(url);
+                return doc;
+
+            }
+            catch
+            {
+                HtmlWeb web = new HtmlWeb();
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml("<body><div class=\"ql-editor\" data-gramm=\"false\" contenteditable=\"true\" data-placeholder=\"Read an article...\"><h1><span style=\"color: rgb(230, 0, 0);\">We</span><span style=\"color: rgb(230, 0, 0);\" class=\"hljs-comment\">'re sorry, but InkOwl encountered an issue while trying to load the URL you provided. The following reasons may have caused the failure:</span></h1><p><br></p><p><span class=\"hljs-number\">1</span>. Invalid URL: Please ensure that the URL you entered <span class=\"hljs-built_in\">is</span> correct <span class=\"hljs-built_in\">and</span> properly formatted. Check <span class=\"hljs-keyword\">for</span> any typos, missing characters, <span class=\"hljs-built_in\">or</span> extra spaces.</p><p><br></p><p><span class=\"hljs-number\">2</span>. Network Connection Issues: InkOwl requires a stable internet connection <span class=\"hljs-keyword\">to</span> load URLs. Please check your network connection <span class=\"hljs-built_in\">and</span> <span class=\"hljs-keyword\">try</span> again. <span class=\"hljs-keyword\">If</span> you are behind a firewall <span class=\"hljs-built_in\">or</span> <span class=\"hljs-keyword\">using</span> a proxy, ensure that it allows access <span class=\"hljs-keyword\">to</span> the provided URL.</p><p><br></p><p><span class=\"hljs-number\">3</span>. Server Unavailability: The server hosting the provided URL may be temporarily down <span class=\"hljs-built_in\">or</span> experiencing issues. <span class=\"hljs-keyword\">Try</span> accessing the URL later <span class=\"hljs-built_in\">or</span> confirm its availability <span class=\"hljs-keyword\">by</span> checking <span class=\"hljs-keyword\">with</span> the website administrator.</p><p><br></p><p><span class=\"hljs-number\">4</span>. Security Restrictions: Some URLs may be restricted due <span class=\"hljs-keyword\">to</span> security measures. Ensure that the URL <span class=\"hljs-built_in\">is</span> accessible <span class=\"hljs-built_in\">and</span> <span class=\"hljs-built_in\">not</span> blocked <span class=\"hljs-keyword\">by</span> security settings, firewalls, <span class=\"hljs-built_in\">or</span> antivirus software.</p><p><br></p><h1><br></h1></div></body>");
+                    
+                    
+                    //web.Load("<body><h1>We failed to Load Url Provided</h1></body>");
+                return doc;
+            }
+
         }
 
 

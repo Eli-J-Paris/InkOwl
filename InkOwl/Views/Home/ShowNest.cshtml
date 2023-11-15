@@ -73,7 +73,7 @@
             <div style="display:flex">
                 <form method="post" action="/nest/@Model.Id/activearticle">
                     <input type="hidden" name="articleIndex" value="@i">
-                    <button type="submit" class="sidebutton"> @Model.Articles[i].Title :@i</button>
+                    <button type="submit" class="sidebutton" style="margin-left:10px;"> @Model.Articles[i].Title</button>
                 </form>
                 @if (Model.Articles.Count > 1)
                 {
@@ -96,7 +96,7 @@
             <div style="display:flex">
                 <form method="post" action="/nest/@Model.Id/activenote">
                     <input type="hidden" name="noteIndex" value="@i">
-                    <button type="submit" class="sidebutton"> @Model.Notes[i].Title :@i</button>
+                    <button type="submit" class="sidebutton" style="margin-left:10px;"> @Model.Notes[i].Title</button>
                 </form>
                 @if (Model.Notes.Count > 1)
                 {
@@ -164,14 +164,14 @@
         border-radius: 5px;
         box-shadow: 0 3px #ccc;
         transition: transform 100ms;
-        margin-left:10px;
-        margin-top:10px;
+        margin-left: 10px;
+        margin-top: 10px;
     }
 
-    .load-audioe:hover {
-            transform: translateY(1px);
-            box-shadow: 0 2px #ccc;
-        }
+    .load-audio:hover {
+        transform: translateY(1px);
+        box-shadow: 0 2px #ccc;
+    }
 </style>
 
 <script>
