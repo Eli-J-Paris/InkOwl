@@ -50,6 +50,7 @@ namespace InkOwl.Controllers
         {
             var nest = _context.Nests.Find(nestId);
             nest.ActiveArticleId = articleIndex;
+            _context.Nests.Update(nest);
             _context.SaveChanges();
 
             return Redirect($"/nest/{nestId}");
@@ -62,6 +63,7 @@ namespace InkOwl.Controllers
         {
             var nest = _context.Nests.Find(nestId);
             nest.ActiveNoteId = noteIndex;
+            _context.Nests.Update(nest);
             _context.SaveChanges();
 
             return Redirect($"/nest/{nestId}");

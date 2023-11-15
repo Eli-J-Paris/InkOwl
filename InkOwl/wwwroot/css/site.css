@@ -1,6 +1,5 @@
 html {
-  font-size: 14px;
-  
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
@@ -17,6 +16,7 @@ html {
 body {
     margin-bottom: 60px;
     background-color: #2F97C1;
+    font-family: Verdana,'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;
 }
 
 .nest-container {
@@ -37,6 +37,10 @@ body {
     max-height: 69vh; /* Set a fixed height for the container */
     overflow: auto; /* Add a scrollbar when content overflows */
     background-color: #FCF4F7;
+    font-family: Verdana,'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;
+/*    font-family:'Times New Roman','Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+*/    font-size:1.00rem!important;
+    color:black;
 }
 
 .notes {
@@ -52,6 +56,9 @@ body {
     max-height: 69vh;
     overflow: auto;
     background-color: #FCF4F7;
+    font-family: Verdana,'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;
+    font-size: 1.00rem !important;
+    color: black;
 }
 
 .chat-bot{

@@ -135,10 +135,63 @@
 <button id="showPopupButton" class="inkowl" style=""><img src="/images/InkOwl.png" width="128px" height="128px" /></button>
 
 
+<div style="display:flex; margin-top:10px;">
+   
+
+    <!-- Use an iframe to force the browser to reload the audio source -->
+    <iframe id="audioIframe" style="display:none;"></iframe>
+    <audio id="audioPlayer" controls>
+        <source id="audioSource" src="/Home/GetAudio?nocache=@DateTime.Now.Ticks" type="audio/wav" />
+        Your browser does not support the audio element.
+    </audio>
+
+    @using (Html.BeginForm("Speak", "Home", FormMethod.Post, new { id = "speakForm" }))
+    {
+        @Html.Hidden("nestId", Model.Id)
+        <input type="hidden" name="text" id="TTS" />
+        <div>
+            <button type="submit" class="load-audio">Load Article Audio</button>
+        </div>
+    }
+</div>
+
+
+<style>
+    .load-audio {
+        background: #fff;
+        color: #2F97C1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 3px #ccc;
+        transition: transform 100ms;
+        margin-left:10px;
+        margin-top:10px;
+    }
+
+    .load-audioe:hover {
+            transform: translateY(1px);
+            box-shadow: 0 2px #ccc;
+        }
+</style>
+
+<script>
+    // Function to force the browser to reload the audio source
+    function reloadAudio() {
+        var audioIframe = document.getElementById("audioIframe");
+        var audioSource = document.getElementById("audioSource");
+
+        // Reload the audio source when the button is clicked
+        audioSource.src = "/Home/GetAudio?" + new Date().getTime();
+        audioIframe.src = audioSource.src;
+    }
+</script>
+
+
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-/*<script src="/js/ChatBotScript.js"></script>*/
+<script src="/js/ChatBotScript.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="~/js/URLPopup.js"></script>
 
@@ -201,6 +254,9 @@
 
         var urlContent = document.getElementById('inputUrl').value;
         document.getElementById('urlContent').value = urlContent;
+
+        var TextToSpeechContent = quillArticle.root.innerText;
+        document.getElementById('TTS').value = TextToSpeechContent;
     }
     setInterval(updateForm, 500);
 
@@ -253,7 +309,7 @@
     }
 </script>
 
-
+@*ChatBot*@
 <script>
 
     $(document).ready(function () {

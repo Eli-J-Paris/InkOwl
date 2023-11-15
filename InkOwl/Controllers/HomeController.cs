@@ -26,8 +26,9 @@ namespace InkOwl.Controllers
         }
 
         [HttpPost]
-        public ActionResult Speak(string text)
+        public ActionResult Speak(string text, int nestId)
         {
+            text ??= "Welcome to Ink Owl";
             string textToSpeak = text;
 
             string outputPath = Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", "output.wav");
@@ -40,7 +41,7 @@ namespace InkOwl.Controllers
                 synthesizer.Speak(textToSpeak);
             }
 
-            return RedirectToAction("Voice");  // Redirect to the view containing the audio player
+            return RedirectToAction("ShowNest", new {id= nestId});  // Redirect to the view containing the audio player
         }
 
         public IActionResult GetAudio()
