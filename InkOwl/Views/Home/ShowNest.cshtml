@@ -162,20 +162,34 @@
         ['clean']                                         // remove formatting button
     ];
 
-    var quillArticle = new Quill('#article-editor', {
+  
+    
+        var quillArticle = new Quill('#article-editor', {
         modules: {
             toolbar: toolbarOptions
         },
-        placeholder: 'Compose an epic...',
+        placeholder: 'Read an article...',
         theme: 'snow'// 'bubble'
     });
     var quillNote = new Quill('#note-editor', {
         modules: {
             toolbar: toolbarOptions
         },
-        placeholder: 'Compose an epic...',
+        placeholder: 'Compose your thoughts...',
         theme: 'snow' //'bubble'
     });
+    $(document).ready(function () {
+
+
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('.ql-italic').mouseover();
+    setTimeout(function () {
+        $('.ql-italic').mouseout();
+    }, 2500);
+    });
+
 </script>
 
 @*Updates form every 1/2 second*@
