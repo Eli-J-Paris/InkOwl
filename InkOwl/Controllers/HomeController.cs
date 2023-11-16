@@ -83,6 +83,8 @@ namespace InkOwl.Controllers
         public IActionResult ShowNest(int id)
         {    
            var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
+            if (nest == null) return NotFound();
+
             ViewBag.activeArticle = nest.ActiveArticleId;
             ViewBag.activeNote = nest.ActiveNoteId;
             ChangeNavBar(nest);
