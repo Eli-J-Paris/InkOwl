@@ -1,18 +1,56 @@
 ﻿using InkOwl.DataAccess;
 using InkOwl.Models;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Speech.Synthesis;
 
 namespace InkOwl.Controllers
 {
     public class HomeController : Controller
     {
         private readonly InkOwlContext _context;
-
-        public HomeController(InkOwlContext context)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public HomeController(InkOwlContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
+        }
+
+
+        [Route("/voice")]
+        public IActionResult Voice()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Speak(string text, int nestId)
+        {
+            text ??= "Welcome to Ink Owl";
+            string textToSpeak = text;
+
+            string outputPath = Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", "output.wav");
+
+            using (SpeechSynthesizer synthesizer = new SpeechSynthesizer())
+            {
+                synthesizer.SetOutputToWaveFile(outputPath);
+                synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
+
+                synthesizer.Speak(textToSpeak);
+            }
+
+            return RedirectToAction("ShowNest", new {id= nestId});  // Redirect to the view containing the audio player
+        }
+
+        public IActionResult GetAudio()
+        {
+            // Use _hostingEnvironment.ContentRootPath to get the root path of the application
+            string audioPath = Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", "output.wav");
+
+            // Return the audio file
+            return PhysicalFile(audioPath, "audio/wav");
         }
 
         [HttpGet]
@@ -45,6 +83,8 @@ namespace InkOwl.Controllers
         public IActionResult ShowNest(int id)
         {    
            var nest = _context.Nests.Where(n => n.Id == id).Include(n => n.Articles).Include(n => n.Notes).First();
+            if (nest == null) return NotFound();
+
             ViewBag.activeArticle = nest.ActiveArticleId;
             ViewBag.activeNote = nest.ActiveNoteId;
             ChangeNavBar(nest);

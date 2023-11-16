@@ -34,6 +34,7 @@ input {
     }
 
 .sidebutton {
+    padding-left:10px;
     background-color: #5D6098
 }
 
@@ -49,7 +50,7 @@ input {
     }
 
 .sidebar {
-    margin-top: 63px;
+    margin-top: 61px;
     height: 100%;
     width: 250px;
     position: fixed;

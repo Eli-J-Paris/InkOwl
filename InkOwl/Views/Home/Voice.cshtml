@@ -1,0 +1,23 @@
+﻿@using (Html.BeginForm("Speak", "Home", FormMethod.Post, new { id = "speakForm" }))
+{<input type="text" name="text" />
+    <button type="submit">Speak</button>
+}
+
+<!-- Use an iframe to force the browser to reload the audio source -->
+<iframe id="audioIframe" style="display:none;"></iframe>
+<audio id="audioPlayer" controls>
+    <source id="audioSource" src="/Home/GetAudio?nocache=@DateTime.Now.Ticks" type="audio/wav" />
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    // Function to force the browser to reload the audio source
+    function reloadAudio() {
+        var audioIframe = document.getElementById("audioIframe");
+        var audioSource = document.getElementById("audioSource");
+
+        // Reload the audio source when the button is clicked
+        audioSource.src = "/Home/GetAudio?" + new Date().getTime();
+        audioIframe.src = audioSource.src;
+    }
+</script>

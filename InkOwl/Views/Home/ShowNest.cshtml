@@ -2,6 +2,8 @@
 @{
     var activeArticle = ViewBag.activeArticle;
     var activeNote = ViewBag.activeNote;
+    if (activeArticle == null) activeArticle = 0;
+    if (activeNote == null) activeNote = 0;
 }
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/ChatBotStyle.css" />
@@ -71,7 +73,7 @@
             <div style="display:flex">
                 <form method="post" action="/nest/@Model.Id/activearticle">
                     <input type="hidden" name="articleIndex" value="@i">
-                    <button type="submit" class="sidebutton"> @Model.Articles[i].Title :@i</button>
+                    <button type="submit" class="sidebutton" style="margin-left:10px;"> @Model.Articles[i].Title</button>
                 </form>
                 @if (Model.Articles.Count > 1)
                 {
@@ -94,7 +96,7 @@
             <div style="display:flex">
                 <form method="post" action="/nest/@Model.Id/activenote">
                     <input type="hidden" name="noteIndex" value="@i">
-                    <button type="submit" class="sidebutton"> @Model.Notes[i].Title :@i</button>
+                    <button type="submit" class="sidebutton" style="margin-left:10px;"> @Model.Notes[i].Title</button>
                 </form>
                 @if (Model.Notes.Count > 1)
                 {
@@ -133,10 +135,63 @@
 <button id="showPopupButton" class="inkowl" style=""><img src="/images/InkOwl.png" width="128px" height="128px" /></button>
 
 
+<div style="display:flex; margin-top:10px;">
+   
+
+    <!-- Use an iframe to force the browser to reload the audio source -->
+    <iframe id="audioIframe" style="display:none;"></iframe>
+    <audio id="audioPlayer" controls>
+        <source id="audioSource" src="/Home/GetAudio?nocache=@DateTime.Now.Ticks" type="audio/wav" />
+        Your browser does not support the audio element.
+    </audio>
+
+    @using (Html.BeginForm("Speak", "Home", FormMethod.Post, new { id = "speakForm" }))
+    {
+        @Html.Hidden("nestId", Model.Id)
+        <input type="hidden" name="text" id="TTS" />
+        <div>
+            <button type="submit" class="load-audio">Load Article Audio</button>
+        </div>
+    }
+</div>
 
 
-@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-*@<script src="/js/ChatBotScript.js"></script>
+<style>
+    .load-audio {
+        background: #fff;
+        color: #2F97C1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 3px #ccc;
+        transition: transform 100ms;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .load-audio:hover {
+        transform: translateY(1px);
+        box-shadow: 0 2px #ccc;
+    }
+</style>
+
+<script>
+    // Function to force the browser to reload the audio source
+    function reloadAudio() {
+        var audioIframe = document.getElementById("audioIframe");
+        var audioSource = document.getElementById("audioSource");
+
+        // Reload the audio source when the button is clicked
+        audioSource.src = "/Home/GetAudio?" + new Date().getTime();
+        audioIframe.src = audioSource.src;
+    }
+</script>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/ChatBotScript.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="~/js/URLPopup.js"></script>
 
@@ -162,20 +217,23 @@
         ['clean']                                         // remove formatting button
     ];
 
-    var quillArticle = new Quill('#article-editor', {
+  
+
+        var quillArticle = new Quill('#article-editor', {
         modules: {
             toolbar: toolbarOptions
         },
-        placeholder: 'Compose an epic...',
+        placeholder: 'Read an article...',
         theme: 'snow'// 'bubble'
     });
     var quillNote = new Quill('#note-editor', {
         modules: {
             toolbar: toolbarOptions
         },
-        placeholder: 'Compose an epic...',
+        placeholder: 'Compose your thoughts...',
         theme: 'snow' //'bubble'
-    });
+    });  
+
 </script>
 
 @*Updates form every 1/2 second*@
@@ -196,6 +254,9 @@
 
         var urlContent = document.getElementById('inputUrl').value;
         document.getElementById('urlContent').value = urlContent;
+
+        var TextToSpeechContent = quillArticle.root.innerText;
+        document.getElementById('TTS').value = TextToSpeechContent;
     }
     setInterval(updateForm, 500);
 
@@ -248,6 +309,87 @@
     }
 </script>
 
+@*ChatBot*@
+<script>
+
+    $(document).ready(function () {
+        // Show the pop-up when needed
+        $("#showPopupButton").click(function () {
+            $("#popup").show();
+        });
+
+        // Hide the pop-up
+        $("#closePopupButton").click(function () {
+            $("#popup").hide();
+        });
+    });
 
 
+    const imgBOT = "/images/bot.png";
+    const imgPerson = "/images/user.png";
+    const nameBOT = "InkOwl";
+    const namePerson = "You";
+
+    $(function () {
+        addChatMessage(nameBOT, imgBOT, "right", "Hey! How may I help you?");
+
+        $('#sendButton').click(function () {
+            var message = $('#messageInput').val();
+            askChatGPT(message);
+            $('#messageInput').val('');
+            return false;
+        });
+
+        function askChatGPT(message) {
+            addChatMessage(namePerson, imgPerson, "left", message);
+
+            $.ajax({
+                url: '/AskChatGPT',  /*!import*/
+                type: 'POST',
+                data: JSON.stringify(message),
+                async: true,
+                contentType: 'application/json',
+                success: function (response) {
+                    addChatMessage(nameBOT, imgBOT, "right", response.data);
+                    $('.imgLoader').hide();
+                }
+            });
+        }
+
+        function addChatMessage(name, img, side, text) {
+            const msgHTML = `
+                                        <div class="msg ${side}-msg">
+
+
+                                            <div class="msg-bubble">
+                                            <div class="msg-info">
+                                                <div class="msg-info-name">${name}</div>
+                                                <div class="msg-info-time">${formatDate(new Date())}</div>
+                                            </div>
+
+                                            <div class="msg-text">${text}</div>
+                                            </div>
+                                        </div>
+                                        `;
+
+            $(".msger-chat").append($(msgHTML));
+
+            if (side == "left") {
+                var loaderHTML = `<div id="dvLoader"><img class="imgLoader"  /></div>`;
+                $(".msger-chat").append($(loaderHTML));
+            }
+
+            $(".msger-chat").scrollTop($(".msger-chat").scrollTop() + 500);
+
+            return false;
+        }
+
+        function formatDate(date) {
+            const h = "0" + date.getHours();
+            const m = "0" + date.getMinutes();
+
+            return `${h.slice(-2)}:${m.slice(-2)}`;
+        }
+    });
+</script>
 
