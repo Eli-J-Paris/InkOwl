@@ -11,13 +11,13 @@ This is my 120+ hour, two week long capstone project for Turing School of Softwa
 
 ### Set up
 1. Make a clone of this repo and open it in Visual Studio.
-2. In either appsettings.json in the project or in your user sercret folder add:
+2. In either appsettings.json in the project or in your user sercrets folder add:
    ```
    {
    "INKOWL_DBCONNECTIONSTRING": "Server=localhost;Database=InkOwl;Port=5432;Username=YOURPGADMINUSERNAME;Password=YOURPGADMINPASSWORD",
    }
    ```
-3. (Optional) if you want to use the chat bot add this code:
+3. (Optional) if you want to use the chat bot add this code to user secrets:
     ```
    {
    "CHATGPT_APIKEY": "YOUR OWN UNIQUE OPEN AI API KEY"
