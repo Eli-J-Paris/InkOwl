@@ -4,6 +4,21 @@ Ink Owl is a dual purpose research and note taking application where a user can 
 This is my 120+ hour, two week long capstone project for Turing School of Software and Design. Having struggled taking hand written notes throughout highschool and my time at college, I was frustrated by how little I was learning during lectures. After switching to digital notes I quickly saw an improvement in my learning. From there I started to wonder about the full potential of taking notes digitally which eventually lead me to make InkOwl!
 <img width="960" alt="image" src="https://github.com/Eli-J-Paris/InkOwl/assets/130601227/7aa3d8de-d484-4d46-a28a-3c856f69e5a6">
 
+
+## Features
+- Web scraping for online article contents
+- Fully functioning text editors for articles and notes
+- Ability to store mutiple articles along side multiple notes inside of one 'Nest'
+- Auto save leveraging AJAX
+- Chat Bot powered by Open Ai's ChatGPT
+- Text to speech so that articles can be read to users 
+### Future Additions
+- More robust and accurate web scraping
+- uploading an article by pdf
+- Better voices for text to speech
+- More Test Coverage
+- Create a single article or note document
+- More error handeling and logging
 ## Getting Started
 
 ### Prerequisites
@@ -26,3 +41,8 @@ This is my 120+ hour, two week long capstone project for Turing School of Softwa
    ```
  4. In visual studio naviagate to tools -> NuGet package manager -> Package Manager Console -> run update-database in the package manager console.
  5. You are now ready to start studying!
+
+## Tech Stack
+
+
+
